@@ -1,22 +1,54 @@
 import { Champion, ChampionBuild, Lane, MatchFeedback, AppDatabase } from '../types/lol';
 import { INITIAL_CHAMPIONS, generateDefaultBuild } from '../data/championsData';
+import { db } from './firebase';
+import { collection, doc, getDoc, getDocs, setDoc, deleteDoc } from 'firebase/firestore';
 
 const STORAGE_KEY = 'lol_tactical_playbook_db_v1';
 
-// Determine API base path based on current location
-function getApiBaseUrl(): string {
-  if (typeof window !== 'undefined') {
-    if (window.location.hostname.endsWith('github.io') || window.location.protocol === 'file:') {
-      return '';
-    }
-    if (window.location.pathname.startsWith('/lolgaming')) {
-      return '/lolgaming/api';
-    }
-  }
-  return '/api';
+export enum OperationType {
+  CREATE = 'create',
+  UPDATE = 'update',
+  DELETE = 'delete',
+  LIST = 'list',
+  GET = 'get',
+  WRITE = 'write',
 }
 
-// Local Storage Helper for GitHub Pages / Static Hosting fallback
+interface FirestoreErrorInfo {
+  error: string;
+  operationType: OperationType;
+  path: string | null;
+  authInfo: {
+    userId?: string | null;
+    email?: string | null;
+    emailVerified?: boolean | null;
+    isAnonymous?: boolean | null;
+    tenantId?: string | null;
+    providerInfo?: {
+      providerId?: string | null;
+      email?: string | null;
+    }[];
+  };
+}
+
+export function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
+  const errInfo: FirestoreErrorInfo = {
+    error: error instanceof Error ? error.message : String(error),
+    authInfo: {
+      userId: null,
+      email: null,
+      emailVerified: null,
+      isAnonymous: true,
+      tenantId: null,
+      providerInfo: []
+    },
+    operationType,
+    path
+  };
+  console.warn('Firestore Operation Notice:', JSON.stringify(errInfo));
+}
+
+// Local Storage Helper for instant cache and offline resilience
 function getLocalDatabase(): AppDatabase {
   if (typeof window === 'undefined') {
     return { champions: INITIAL_CHAMPIONS, builds: {}, feedbacks: [], version: 1 };
@@ -27,7 +59,6 @@ function getLocalDatabase(): AppDatabase {
     if (raw) {
       const parsed: AppDatabase = JSON.parse(raw);
       if (parsed.champions && parsed.champions.length > 0) {
-        // Sync official image URLs if outdated
         const officialMap = new Map(INITIAL_CHAMPIONS.map(c => [c.id, c]));
         parsed.champions = parsed.champions.map(c => {
           if (c.isCustom) return c;
@@ -96,67 +127,56 @@ function saveLocalDatabase(db: AppDatabase) {
   }
 }
 
-// Track whether backend server is responding
-let isServerAvailable: boolean | null = null;
-
-async function checkServerAvailability(): Promise<boolean> {
-  if (isServerAvailable !== null) return isServerAvailable;
-
-  // Immediate detection for GitHub Pages or static host
-  if (typeof window !== 'undefined') {
-    if (window.location.hostname.endsWith('github.io') || window.location.protocol === 'file:') {
-      isServerAvailable = false;
-      return false;
-    }
-  }
-
-  try {
-    const base = getApiBaseUrl();
-    if (!base) {
-      isServerAvailable = false;
-      return false;
-    }
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 1000);
-    const res = await fetch(`${base}/health`, { signal: controller.signal });
-    clearTimeout(timeout);
-    isServerAvailable = res.ok;
-    return res.ok;
-  } catch {
-    isServerAvailable = false;
-    return false;
-  }
-}
+let isCloudSynced = false;
 
 export const api = {
-  isStaticMode(): boolean {
-    return isServerAvailable === false;
+  isCloudActive(): boolean {
+    return isCloudSynced;
   },
 
-  // Fetch all champions
+  // Fetch all champions from Cloud Firestore and merge with official roster
   async getChampions(): Promise<Champion[]> {
-    const hasServer = await checkServerAvailability();
-    if (hasServer) {
-      try {
-        const base = getApiBaseUrl();
-        const res = await fetch(`${base}/champions`);
-        if (res.ok) {
-          const data = await res.json();
-          // Update local cache
-          const localDb = getLocalDatabase();
-          localDb.champions = data;
-          saveLocalDatabase(localDb);
-          return data;
+    const localDb = getLocalDatabase();
+    try {
+      const championsColl = collection(db, 'champions');
+      const snapshot = await getDocs(championsColl);
+
+      if (!snapshot.empty) {
+        isCloudSynced = true;
+        const cloudChamps: Champion[] = [];
+        snapshot.forEach(docSnap => {
+          cloudChamps.push(docSnap.data() as Champion);
+        });
+
+        // Merge cloud custom champions & lane overrides with official champions
+        const officialMap = new Map(INITIAL_CHAMPIONS.map(c => [c.id, { ...c }]));
+        const customChamps: Champion[] = [];
+
+        for (const item of cloudChamps) {
+          if (item.isCustom) {
+            customChamps.push(item);
+          } else if (officialMap.has(item.id)) {
+            // Apply lane overrides or notes
+            const official = officialMap.get(item.id)!;
+            official.lanes = item.lanes || official.lanes;
+            official.primaryLane = item.primaryLane || official.primaryLane;
+            if (item.notes) official.notes = item.notes;
+          }
         }
-      } catch (err) {
-        console.warn('Backend fetch failed, using local storage', err);
+
+        const merged = [...customChamps, ...Array.from(officialMap.values())];
+        localDb.champions = merged;
+        saveLocalDatabase(localDb);
+        return merged;
       }
+    } catch (err) {
+      handleFirestoreError(err, OperationType.LIST, 'champions');
     }
-    // Fallback: LocalStorage / Built-in
-    return getLocalDatabase().champions;
+
+    return localDb.champions;
   },
 
-  // Add custom champion
+  // Add custom champion to Cloud Firestore
   async addChampion(champ: Partial<Champion>): Promise<Champion> {
     const localDb = getLocalDatabase();
     const id = champ.name?.toLowerCase().replace(/[^a-z0-9]/g, '_') || `champ_${Date.now()}`;
@@ -183,24 +203,23 @@ export const api = {
     }
     saveLocalDatabase(localDb);
 
-    // Try server sync
-    if (await checkServerAvailability()) {
-      try {
-        const base = getApiBaseUrl();
-        await fetch(`${base}/champions`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(champ)
-        });
-      } catch (e) {
-        console.warn('Server sync failed, saved locally', e);
+    // Save to Firestore cloud
+    try {
+      await setDoc(doc(db, 'champions', id), newChamp);
+      for (const lane of newChamp.lanes) {
+        const key = `${id}_${lane}`;
+        const defaultBuild = localDb.builds[key] || generateDefaultBuild(newChamp, lane);
+        await setDoc(doc(db, 'builds', key), defaultBuild);
       }
+      isCloudSynced = true;
+    } catch (err) {
+      handleFirestoreError(err, OperationType.CREATE, `champions/${id}`);
     }
 
     return newChamp;
   },
 
-  // Update champion lanes
+  // Update champion lanes in Cloud Firestore
   async updateChampionLanes(championId: string, lanes: Lane[], primaryLane?: Lane): Promise<Champion> {
     const localDb = getLocalDatabase();
     const champ = localDb.champions.find(c => c.id === championId);
@@ -216,60 +235,60 @@ export const api = {
       saveLocalDatabase(localDb);
     }
 
-    // Try server sync
-    if (await checkServerAvailability()) {
-      try {
-        const base = getApiBaseUrl();
-        await fetch(`${base}/champions/${championId}/lanes`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ lanes, primaryLane })
-        });
-      } catch (e) {
-        console.warn('Server sync failed', e);
-      }
+    // Save lane changes to Firestore cloud
+    try {
+      await setDoc(
+        doc(db, 'champions', championId),
+        {
+          id: championId,
+          lanes,
+          primaryLane: primaryLane && lanes.includes(primaryLane) ? primaryLane : lanes[0]
+        },
+        { merge: true }
+      );
+      isCloudSynced = true;
+    } catch (err) {
+      handleFirestoreError(err, OperationType.UPDATE, `champions/${championId}`);
     }
 
     return champ || { id: championId, name: championId, koreanName: championId, title: '', role: '전사', lanes, primaryLane: primaryLane || lanes[0], difficulty: '보통', avatarUrl: '' };
   },
 
-  // Delete custom champion
+  // Delete custom champion from Cloud Firestore
   async deleteChampion(championId: string): Promise<void> {
     const localDb = getLocalDatabase();
     localDb.champions = localDb.champions.filter(c => c.id !== championId);
     saveLocalDatabase(localDb);
 
-    if (await checkServerAvailability()) {
-      try {
-        const base = getApiBaseUrl();
-        await fetch(`${base}/champions/${championId}`, { method: 'DELETE' });
-      } catch (e) {
-        console.warn('Server delete failed', e);
-      }
+    try {
+      await deleteDoc(doc(db, 'champions', championId));
+      isCloudSynced = true;
+    } catch (err) {
+      handleFirestoreError(err, OperationType.DELETE, `champions/${championId}`);
     }
   },
 
-  // Get build
+  // Get build from Cloud Firestore
   async getBuild(championId: string, lane: Lane): Promise<ChampionBuild> {
     const upperLane = lane.toUpperCase() as Lane;
     const key = `${championId}_${upperLane}`;
 
-    if (await checkServerAvailability()) {
-      try {
-        const base = getApiBaseUrl();
-        const res = await fetch(`${base}/builds/${championId}/${upperLane}`);
-        if (res.ok) {
-          const data = await res.json();
-          const localDb = getLocalDatabase();
-          localDb.builds[key] = data;
-          saveLocalDatabase(localDb);
-          return data;
-        }
-      } catch (e) {
-        console.warn('Server build fetch failed, checking local', e);
+    // Check Cloud Firestore first
+    try {
+      const buildDoc = await getDoc(doc(db, 'builds', key));
+      if (buildDoc.exists()) {
+        isCloudSynced = true;
+        const data = buildDoc.data() as ChampionBuild;
+        const localDb = getLocalDatabase();
+        localDb.builds[key] = data;
+        saveLocalDatabase(localDb);
+        return data;
       }
+    } catch (err) {
+      handleFirestoreError(err, OperationType.GET, `builds/${key}`);
     }
 
+    // Fallback: Local database or generate default
     const localDb = getLocalDatabase();
     if (localDb.builds[key]) {
       return localDb.builds[key];
@@ -280,13 +299,19 @@ export const api = {
       const generated = generateDefaultBuild(champ, upperLane);
       localDb.builds[key] = generated;
       saveLocalDatabase(localDb);
+
+      // Save seed to Firestore in background
+      setDoc(doc(db, 'builds', key), generated).catch(e => {
+        handleFirestoreError(e, OperationType.CREATE, `builds/${key}`);
+      });
+
       return generated;
     }
 
     throw new Error('빌드를 찾을 수 없습니다.');
   },
 
-  // Save build
+  // Save build to Cloud Firestore
   async saveBuild(build: ChampionBuild): Promise<ChampionBuild> {
     const key = `${build.championId}_${build.lane.toUpperCase()}`;
     const updated = {
@@ -299,39 +324,52 @@ export const api = {
     localDb.builds[key] = updated;
     saveLocalDatabase(localDb);
 
-    if (await checkServerAvailability()) {
-      try {
-        const base = getApiBaseUrl();
-        await fetch(`${base}/builds/${build.championId}/${build.lane}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(updated)
-        });
-      } catch (e) {
-        console.warn('Server sync failed, saved locally', e);
-      }
+    // Save to Cloud Firestore
+    try {
+      await setDoc(doc(db, 'builds', key), updated);
+      isCloudSynced = true;
+    } catch (err) {
+      handleFirestoreError(err, OperationType.WRITE, `builds/${key}`);
     }
 
     return updated;
   },
 
-  // Get feedbacks
+  // Get feedbacks from Cloud Firestore
   async getFeedbacks(championId?: string): Promise<MatchFeedback[]> {
-    if (await checkServerAvailability()) {
-      try {
-        const base = getApiBaseUrl();
-        const url = championId ? `${base}/feedbacks?championId=${championId}` : `${base}/feedbacks`;
-        const res = await fetch(url);
-        if (res.ok) {
-          const data = await res.json();
-          const localDb = getLocalDatabase();
-          localDb.feedbacks = data;
-          saveLocalDatabase(localDb);
-          return data;
+    try {
+      const feedbacksColl = collection(db, 'feedbacks');
+      const snapshot = await getDocs(feedbacksColl);
+
+      if (!snapshot.empty) {
+        isCloudSynced = true;
+        const cloudFeedbacks: MatchFeedback[] = [];
+        snapshot.forEach(docSnap => {
+          cloudFeedbacks.push(docSnap.data() as MatchFeedback);
+        });
+
+        // Sort by createdAt descending
+        cloudFeedbacks.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+        const localDb = getLocalDatabase();
+        localDb.feedbacks = cloudFeedbacks;
+        saveLocalDatabase(localDb);
+
+        if (championId) {
+          return cloudFeedbacks.filter(f => f.championId === championId);
         }
-      } catch (e) {
-        console.warn('Server feedback fetch failed', e);
+        return cloudFeedbacks;
+      } else {
+        // First run on clean Firestore: seed the sample Locke match feedback
+        const localDb = getLocalDatabase();
+        if (localDb.feedbacks.length > 0) {
+          for (const fb of localDb.feedbacks) {
+            await setDoc(doc(db, 'feedbacks', fb.id), fb);
+          }
+        }
       }
+    } catch (err) {
+      handleFirestoreError(err, OperationType.LIST, 'feedbacks');
     }
 
     const localDb = getLocalDatabase();
@@ -341,11 +379,12 @@ export const api = {
     return localDb.feedbacks;
   },
 
-  // Create feedback
+  // Create feedback in Cloud Firestore
   async createFeedback(feedback: Omit<MatchFeedback, 'id' | 'createdAt'>): Promise<MatchFeedback> {
+    const id = `fb_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
     const newFeedback: MatchFeedback = {
       ...feedback,
-      id: `fb_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+      id,
       createdAt: Date.now()
     };
 
@@ -353,57 +392,44 @@ export const api = {
     localDb.feedbacks.unshift(newFeedback);
     saveLocalDatabase(localDb);
 
-    if (await checkServerAvailability()) {
-      try {
-        const base = getApiBaseUrl();
-        await fetch(`${base}/feedbacks`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(feedback)
-        });
-      } catch (e) {
-        console.warn('Server sync failed, saved locally', e);
-      }
+    // Save to Cloud Firestore
+    try {
+      await setDoc(doc(db, 'feedbacks', id), newFeedback);
+      isCloudSynced = true;
+    } catch (err) {
+      handleFirestoreError(err, OperationType.CREATE, `feedbacks/${id}`);
     }
 
     return newFeedback;
   },
 
-  // Delete feedback
+  // Delete feedback from Cloud Firestore
   async deleteFeedback(id: string): Promise<void> {
     const localDb = getLocalDatabase();
     localDb.feedbacks = localDb.feedbacks.filter(f => f.id !== id);
     saveLocalDatabase(localDb);
 
-    if (await checkServerAvailability()) {
-      try {
-        const base = getApiBaseUrl();
-        await fetch(`${base}/feedbacks/${id}`, { method: 'DELETE' });
-      } catch (e) {
-        console.warn('Server delete failed', e);
-      }
+    try {
+      await deleteDoc(doc(db, 'feedbacks', id));
+      isCloudSynced = true;
+    } catch (err) {
+      handleFirestoreError(err, OperationType.DELETE, `feedbacks/${id}`);
     }
   },
 
-  // Reset all
+  // Reset to defaults
   async resetToDefaults(): Promise<void> {
     if (typeof window !== 'undefined') {
       localStorage.removeItem(STORAGE_KEY);
     }
-    if (await checkServerAvailability()) {
-      try {
-        const base = getApiBaseUrl();
-        await fetch(`${base}/reset`, { method: 'POST' });
-      } catch (e) {
-        console.warn(e);
-      }
-    }
+    // Re-seed local state
+    getLocalDatabase();
   },
 
   // Export full JSON database for backup
   exportDatabaseJson(): string {
-    const db = getLocalDatabase();
-    return JSON.stringify(db, null, 2);
+    const dbData = getLocalDatabase();
+    return JSON.stringify(dbData, null, 2);
   },
 
   // Import JSON database
@@ -412,6 +438,22 @@ export const api = {
       const parsed: AppDatabase = JSON.parse(jsonStr);
       if (parsed.champions && Array.isArray(parsed.champions)) {
         saveLocalDatabase(parsed);
+        // Also sync imported data into Cloud Firestore
+        for (const champ of parsed.champions) {
+          if (champ.isCustom) {
+            setDoc(doc(db, 'champions', champ.id), champ).catch(console.warn);
+          }
+        }
+        if (parsed.builds) {
+          for (const [key, b] of Object.entries(parsed.builds)) {
+            setDoc(doc(db, 'builds', key), b).catch(console.warn);
+          }
+        }
+        if (parsed.feedbacks) {
+          for (const fb of parsed.feedbacks) {
+            setDoc(doc(db, 'feedbacks', fb.id), fb).catch(console.warn);
+          }
+        }
         return true;
       }
       return false;

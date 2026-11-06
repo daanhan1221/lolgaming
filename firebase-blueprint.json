@@ -1,0 +1,80 @@
+{
+  "entities": {
+    "Champion": {
+      "title": "Champion",
+      "description": "League of Legends champion profile including custom champions",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "koreanName": { "type": "string" },
+        "title": { "type": "string" },
+        "role": { "type": "string" },
+        "lanes": { "type": "array" },
+        "primaryLane": { "type": "string" },
+        "difficulty": { "type": "string" },
+        "avatarUrl": { "type": "string" },
+        "isCustom": { "type": "boolean" },
+        "notes": { "type": "string" }
+      },
+      "required": ["id", "name", "koreanName", "lanes", "primaryLane"]
+    },
+    "ChampionBuild": {
+      "title": "ChampionBuild",
+      "description": "Tactical build setup, runes, items, jungle route, and counters",
+      "type": "object",
+      "properties": {
+        "championId": { "type": "string" },
+        "lane": { "type": "string" },
+        "startingItems": { "type": "array" },
+        "coreItems": { "type": "array" },
+        "situationalItems": { "type": "array" },
+        "summonerSpells": { "type": "array" },
+        "skillOrder": { "type": "string" },
+        "skillNotes": { "type": "string" },
+        "runes": { "type": "object" },
+        "jungleRoute": { "type": "array" },
+        "counters": { "type": "array" },
+        "matchupTips": { "type": "string" },
+        "lastUpdated": { "type": "string" }
+      },
+      "required": ["championId", "lane"]
+    },
+    "MatchFeedback": {
+      "title": "MatchFeedback",
+      "description": "Player game review, outcome, KDA, and stage notes",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "championId": { "type": "string" },
+        "championName": { "type": "string" },
+        "lane": { "type": "string" },
+        "date": { "type": "string" },
+        "result": { "type": "string", "enum": ["WIN", "LOSS"] },
+        "kda": { "type": "object" },
+        "opponentChampion": { "type": "string" },
+        "earlyGameNote": { "type": "string" },
+        "midGameNote": { "type": "string" },
+        "lateGameNote": { "type": "string" },
+        "keyTakeaway": { "type": "string" },
+        "tags": { "type": "array" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["id", "championId", "result", "kda", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/champions/{championId}": {
+      "schema": "Champion",
+      "description": "Custom or modified champion entries"
+    },
+    "/builds/{buildId}": {
+      "schema": "ChampionBuild",
+      "description": "Custom champion rune and item build configurations"
+    },
+    "/feedbacks/{feedbackId}": {
+      "schema": "MatchFeedback",
+      "description": "Game match feedback review notes"
+    }
+  }
+}

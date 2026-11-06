@@ -219,6 +219,22 @@ export default function App() {
     reader.readAsText(file);
   };
 
+  const handleRefreshCloud = async () => {
+    try {
+      setSyncStatus('saving');
+      const [champsData, feedbacksData] = await Promise.all([
+        api.getChampions(),
+        api.getFeedbacks()
+      ]);
+      setChampions(champsData);
+      setFeedbacks(feedbacksData);
+      setSyncStatus('synced');
+    } catch (e) {
+      console.error(e);
+      setSyncStatus('synced');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#070a10] text-slate-100 flex flex-col font-sans">
       {/* Header Bar */}
@@ -227,6 +243,7 @@ export default function App() {
         onSelectLaneFilter={setSelectedLaneFilter}
         onOpenAddModal={() => setIsAddModalOpen(true)}
         syncStatus={syncStatus}
+        onRefreshCloud={handleRefreshCloud}
         onNavigateHome={() => {
           setSelectedChampion(null);
           setSelectedLane(undefined);
