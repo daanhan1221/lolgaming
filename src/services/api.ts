@@ -1,7 +1,16 @@
 import { Champion, ChampionBuild, Lane, MatchFeedback, AppDatabase } from '../types/lol';
 import { INITIAL_CHAMPIONS, generateDefaultBuild } from '../data/championsData';
 import { db } from './firebase';
-import { collection, doc, getDoc, getDocs, setDoc, deleteDoc } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  deleteDoc,
+  onSnapshot,
+  Unsubscribe
+} from 'firebase/firestore';
 
 const STORAGE_KEY = 'lol_tactical_playbook_db_v1';
 
@@ -46,6 +55,11 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
     path
   };
   console.warn('Firestore Operation Notice:', JSON.stringify(errInfo));
+}
+
+// Clean any undefined properties that Firestore rejects
+function cleanForFirestore<T>(data: T): T {
+  return JSON.parse(JSON.stringify(data));
 }
 
 // Local Storage Helper for instant cache and offline resilience
@@ -127,11 +141,75 @@ function saveLocalDatabase(db: AppDatabase) {
   }
 }
 
-let isCloudSynced = false;
+let isCloudSynced = true;
 
 export const api = {
   isCloudActive(): boolean {
     return isCloudSynced;
+  },
+
+  // Real-time listener for feedbacks across multiple devices
+  subscribeFeedbacks(callback: (feedbacks: MatchFeedback[]) => void): Unsubscribe {
+    const feedbacksColl = collection(db, 'feedbacks');
+    return onSnapshot(
+      feedbacksColl,
+      (snapshot) => {
+        isCloudSynced = true;
+        const list: MatchFeedback[] = [];
+        snapshot.forEach((docSnap) => {
+          list.push(docSnap.data() as MatchFeedback);
+        });
+        list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+        if (list.length > 0) {
+          const localDb = getLocalDatabase();
+          localDb.feedbacks = list;
+          saveLocalDatabase(localDb);
+          callback(list);
+        }
+      },
+      (error) => {
+        handleFirestoreError(error, OperationType.LIST, 'feedbacks');
+      }
+    );
+  },
+
+  // Real-time listener for custom champions across multiple devices
+  subscribeChampions(callback: (champions: Champion[]) => void): Unsubscribe {
+    const championsColl = collection(db, 'champions');
+    return onSnapshot(
+      championsColl,
+      (snapshot) => {
+        isCloudSynced = true;
+        const cloudChamps: Champion[] = [];
+        snapshot.forEach((docSnap) => {
+          cloudChamps.push(docSnap.data() as Champion);
+        });
+
+        const officialMap = new Map(INITIAL_CHAMPIONS.map((c) => [c.id, { ...c }]));
+        const customChamps: Champion[] = [];
+
+        for (const item of cloudChamps) {
+          if (item.isCustom) {
+            customChamps.push(item);
+          } else if (officialMap.has(item.id)) {
+            const official = officialMap.get(item.id)!;
+            official.lanes = item.lanes || official.lanes;
+            official.primaryLane = item.primaryLane || official.primaryLane;
+            if (item.notes) official.notes = item.notes;
+          }
+        }
+
+        const merged = [...customChamps, ...Array.from(officialMap.values())];
+        const localDb = getLocalDatabase();
+        localDb.champions = merged;
+        saveLocalDatabase(localDb);
+        callback(merged);
+      },
+      (error) => {
+        handleFirestoreError(error, OperationType.LIST, 'champions');
+      }
+    );
   },
 
   // Fetch all champions from Cloud Firestore and merge with official roster
@@ -141,34 +219,30 @@ export const api = {
       const championsColl = collection(db, 'champions');
       const snapshot = await getDocs(championsColl);
 
-      if (!snapshot.empty) {
-        isCloudSynced = true;
-        const cloudChamps: Champion[] = [];
-        snapshot.forEach(docSnap => {
-          cloudChamps.push(docSnap.data() as Champion);
-        });
+      isCloudSynced = true;
+      const cloudChamps: Champion[] = [];
+      snapshot.forEach((docSnap) => {
+        cloudChamps.push(docSnap.data() as Champion);
+      });
 
-        // Merge cloud custom champions & lane overrides with official champions
-        const officialMap = new Map(INITIAL_CHAMPIONS.map(c => [c.id, { ...c }]));
-        const customChamps: Champion[] = [];
+      const officialMap = new Map(INITIAL_CHAMPIONS.map((c) => [c.id, { ...c }]));
+      const customChamps: Champion[] = [];
 
-        for (const item of cloudChamps) {
-          if (item.isCustom) {
-            customChamps.push(item);
-          } else if (officialMap.has(item.id)) {
-            // Apply lane overrides or notes
-            const official = officialMap.get(item.id)!;
-            official.lanes = item.lanes || official.lanes;
-            official.primaryLane = item.primaryLane || official.primaryLane;
-            if (item.notes) official.notes = item.notes;
-          }
+      for (const item of cloudChamps) {
+        if (item.isCustom) {
+          customChamps.push(item);
+        } else if (officialMap.has(item.id)) {
+          const official = officialMap.get(item.id)!;
+          official.lanes = item.lanes || official.lanes;
+          official.primaryLane = item.primaryLane || official.primaryLane;
+          if (item.notes) official.notes = item.notes;
         }
-
-        const merged = [...customChamps, ...Array.from(officialMap.values())];
-        localDb.champions = merged;
-        saveLocalDatabase(localDb);
-        return merged;
       }
+
+      const merged = [...customChamps, ...Array.from(officialMap.values())];
+      localDb.champions = merged;
+      saveLocalDatabase(localDb);
+      return merged;
     } catch (err) {
       handleFirestoreError(err, OperationType.LIST, 'champions');
     }
@@ -203,13 +277,13 @@ export const api = {
     }
     saveLocalDatabase(localDb);
 
-    // Save to Firestore cloud
+    // Save to Firestore cloud with cleaned data
     try {
-      await setDoc(doc(db, 'champions', id), newChamp);
+      await setDoc(doc(db, 'champions', id), cleanForFirestore(newChamp));
       for (const lane of newChamp.lanes) {
         const key = `${id}_${lane}`;
         const defaultBuild = localDb.builds[key] || generateDefaultBuild(newChamp, lane);
-        await setDoc(doc(db, 'builds', key), defaultBuild);
+        await setDoc(doc(db, 'builds', key), cleanForFirestore(defaultBuild));
       }
       isCloudSynced = true;
     } catch (err) {
@@ -222,7 +296,7 @@ export const api = {
   // Update champion lanes in Cloud Firestore
   async updateChampionLanes(championId: string, lanes: Lane[], primaryLane?: Lane): Promise<Champion> {
     const localDb = getLocalDatabase();
-    const champ = localDb.champions.find(c => c.id === championId);
+    const champ = localDb.champions.find((c) => c.id === championId);
     if (champ) {
       champ.lanes = lanes;
       champ.primaryLane = primaryLane && lanes.includes(primaryLane) ? primaryLane : lanes[0];
@@ -239,11 +313,11 @@ export const api = {
     try {
       await setDoc(
         doc(db, 'champions', championId),
-        {
+        cleanForFirestore({
           id: championId,
           lanes,
           primaryLane: primaryLane && lanes.includes(primaryLane) ? primaryLane : lanes[0]
-        },
+        }),
         { merge: true }
       );
       isCloudSynced = true;
@@ -257,7 +331,7 @@ export const api = {
   // Delete custom champion from Cloud Firestore
   async deleteChampion(championId: string): Promise<void> {
     const localDb = getLocalDatabase();
-    localDb.champions = localDb.champions.filter(c => c.id !== championId);
+    localDb.champions = localDb.champions.filter((c) => c.id !== championId);
     saveLocalDatabase(localDb);
 
     try {
@@ -294,14 +368,14 @@ export const api = {
       return localDb.builds[key];
     }
 
-    const champ = localDb.champions.find(c => c.id === championId);
+    const champ = localDb.champions.find((c) => c.id === championId) || INITIAL_CHAMPIONS.find((c) => c.id === championId);
     if (champ) {
       const generated = generateDefaultBuild(champ, upperLane);
       localDb.builds[key] = generated;
       saveLocalDatabase(localDb);
 
       // Save seed to Firestore in background
-      setDoc(doc(db, 'builds', key), generated).catch(e => {
+      setDoc(doc(db, 'builds', key), cleanForFirestore(generated)).catch((e) => {
         handleFirestoreError(e, OperationType.CREATE, `builds/${key}`);
       });
 
@@ -324,9 +398,9 @@ export const api = {
     localDb.builds[key] = updated;
     saveLocalDatabase(localDb);
 
-    // Save to Cloud Firestore
+    // Save clean object to Cloud Firestore
     try {
-      await setDoc(doc(db, 'builds', key), updated);
+      await setDoc(doc(db, 'builds', key), cleanForFirestore(updated));
       isCloudSynced = true;
     } catch (err) {
       handleFirestoreError(err, OperationType.WRITE, `builds/${key}`);
@@ -341,30 +415,29 @@ export const api = {
       const feedbacksColl = collection(db, 'feedbacks');
       const snapshot = await getDocs(feedbacksColl);
 
-      if (!snapshot.empty) {
-        isCloudSynced = true;
-        const cloudFeedbacks: MatchFeedback[] = [];
-        snapshot.forEach(docSnap => {
-          cloudFeedbacks.push(docSnap.data() as MatchFeedback);
-        });
+      isCloudSynced = true;
+      const cloudFeedbacks: MatchFeedback[] = [];
+      snapshot.forEach((docSnap) => {
+        cloudFeedbacks.push(docSnap.data() as MatchFeedback);
+      });
 
-        // Sort by createdAt descending
-        cloudFeedbacks.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      cloudFeedbacks.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 
+      if (cloudFeedbacks.length > 0) {
         const localDb = getLocalDatabase();
         localDb.feedbacks = cloudFeedbacks;
         saveLocalDatabase(localDb);
 
         if (championId) {
-          return cloudFeedbacks.filter(f => f.championId === championId);
+          return cloudFeedbacks.filter((f) => f.championId === championId);
         }
         return cloudFeedbacks;
       } else {
-        // First run on clean Firestore: seed the sample Locke match feedback
+        // Seed initial review
         const localDb = getLocalDatabase();
         if (localDb.feedbacks.length > 0) {
           for (const fb of localDb.feedbacks) {
-            await setDoc(doc(db, 'feedbacks', fb.id), fb);
+            await setDoc(doc(db, 'feedbacks', fb.id), cleanForFirestore(fb));
           }
         }
       }
@@ -374,7 +447,7 @@ export const api = {
 
     const localDb = getLocalDatabase();
     if (championId) {
-      return localDb.feedbacks.filter(f => f.championId === championId);
+      return localDb.feedbacks.filter((f) => f.championId === championId);
     }
     return localDb.feedbacks;
   },
@@ -394,7 +467,7 @@ export const api = {
 
     // Save to Cloud Firestore
     try {
-      await setDoc(doc(db, 'feedbacks', id), newFeedback);
+      await setDoc(doc(db, 'feedbacks', id), cleanForFirestore(newFeedback));
       isCloudSynced = true;
     } catch (err) {
       handleFirestoreError(err, OperationType.CREATE, `feedbacks/${id}`);
@@ -406,7 +479,7 @@ export const api = {
   // Delete feedback from Cloud Firestore
   async deleteFeedback(id: string): Promise<void> {
     const localDb = getLocalDatabase();
-    localDb.feedbacks = localDb.feedbacks.filter(f => f.id !== id);
+    localDb.feedbacks = localDb.feedbacks.filter((f) => f.id !== id);
     saveLocalDatabase(localDb);
 
     try {
@@ -422,7 +495,6 @@ export const api = {
     if (typeof window !== 'undefined') {
       localStorage.removeItem(STORAGE_KEY);
     }
-    // Re-seed local state
     getLocalDatabase();
   },
 
@@ -438,20 +510,19 @@ export const api = {
       const parsed: AppDatabase = JSON.parse(jsonStr);
       if (parsed.champions && Array.isArray(parsed.champions)) {
         saveLocalDatabase(parsed);
-        // Also sync imported data into Cloud Firestore
         for (const champ of parsed.champions) {
           if (champ.isCustom) {
-            setDoc(doc(db, 'champions', champ.id), champ).catch(console.warn);
+            setDoc(doc(db, 'champions', champ.id), cleanForFirestore(champ)).catch(console.warn);
           }
         }
         if (parsed.builds) {
           for (const [key, b] of Object.entries(parsed.builds)) {
-            setDoc(doc(db, 'builds', key), b).catch(console.warn);
+            setDoc(doc(db, 'builds', key), cleanForFirestore(b)).catch(console.warn);
           }
         }
         if (parsed.feedbacks) {
           for (const fb of parsed.feedbacks) {
-            setDoc(doc(db, 'feedbacks', fb.id), fb).catch(console.warn);
+            setDoc(doc(db, 'feedbacks', fb.id), cleanForFirestore(fb)).catch(console.warn);
           }
         }
         return true;

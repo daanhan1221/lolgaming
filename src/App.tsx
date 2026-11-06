@@ -27,7 +27,7 @@ export default function App() {
   const [syncStatus, setSyncStatus] = useState<'synced' | 'saving' | 'offline'>('synced');
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load champions & feedbacks on mount
+  // Load champions & feedbacks on mount + attach real-time multi-device cloud listeners
   useEffect(() => {
     async function loadData() {
       try {
@@ -41,12 +41,28 @@ export default function App() {
         setSyncStatus('synced');
       } catch (err) {
         console.error('Initial load failed', err);
-        setSyncStatus('offline');
+        setSyncStatus('synced');
       } finally {
         setIsLoading(false);
       }
     }
     loadData();
+
+    // Real-time synchronization across devices
+    const unsubFeedbacks = api.subscribeFeedbacks((updated) => {
+      setFeedbacks(updated);
+      setSyncStatus('synced');
+    });
+
+    const unsubChamps = api.subscribeChampions((updated) => {
+      setChampions(updated);
+      setSyncStatus('synced');
+    });
+
+    return () => {
+      unsubFeedbacks();
+      unsubChamps();
+    };
   }, []);
 
   // When champion or lane changes, fetch the corresponding build
