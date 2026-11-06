@@ -276,20 +276,41 @@ export const BuildEditor: React.FC<BuildEditorProps> = ({ build, onChange, readO
         </h4>
 
         {/* Skill Order Input */}
-        <div className="mb-4 flex flex-wrap items-center gap-3">
-          <span className="text-xs text-slate-400 font-medium">스킬 선마 순서:</span>
-          {readOnly ? (
-            <span className="text-sm font-mono font-bold text-amber-300 bg-slate-950 px-3 py-1 rounded border border-slate-800">
-              {build.skillOrder}
+        <div className="mb-4 space-y-2">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="text-xs text-slate-400 font-semibold">스킬 선마 (OP.GG 스킬 마스터 순서):</span>
+            <span className="text-sm font-mono font-bold text-amber-300 bg-slate-950 px-3 py-1 rounded-lg border border-amber-500/30 flex items-center gap-1.5 shadow-inner">
+              <span className="text-amber-400 text-xs">⚡</span>
+              {build.skillOrder || 'Q > W > E > R'}
             </span>
-          ) : (
-            <input
-              type="text"
-              value={build.skillOrder}
-              onChange={(e) => onChange({ ...build, skillOrder: e.target.value })}
-              placeholder="예: Q > E > W > R"
-              className="px-3 py-1.5 rounded bg-slate-950 border border-slate-800 text-xs font-mono font-bold text-amber-300 focus:outline-none focus:border-amber-500 w-48"
-            />
+            {!readOnly && (
+              <input
+                type="text"
+                value={build.skillOrder}
+                onChange={(e) => onChange({ ...build, skillOrder: e.target.value })}
+                placeholder="직접 입력 (예: Q > W > E > R)"
+                className="px-3 py-1 rounded bg-slate-950 border border-slate-800 text-xs font-mono text-slate-200 focus:outline-none focus:border-amber-500 w-44"
+              />
+            )}
+          </div>
+          {!readOnly && (
+            <div className="flex flex-wrap items-center gap-1.5 pt-1">
+              <span className="text-[11px] text-slate-500 font-medium mr-1">빠른 선택:</span>
+              {['Q > W > E > R', 'Q > E > W > R', 'W > Q > E > R', 'W > E > Q > R', 'E > Q > W > R', 'E > W > Q > R'].map((preset) => (
+                <button
+                  key={preset}
+                  type="button"
+                  onClick={() => onChange({ ...build, skillOrder: preset })}
+                  className={`px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer border ${
+                    build.skillOrder === preset
+                      ? 'bg-amber-500/20 text-amber-300 border-amber-500/60 font-bold'
+                      : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200 hover:bg-slate-800'
+                  }`}
+                >
+                  {preset}
+                </button>
+              ))}
+            </div>
           )}
         </div>
 

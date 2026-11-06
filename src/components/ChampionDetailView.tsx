@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Champion, ChampionBuild, Lane, MatchFeedback } from '../types/lol';
+import { generateDefaultBuild } from '../data/championsData';
 import { BuildEditor } from './BuildEditor';
 import { RuneBuilder } from './RuneBuilder';
 import { JungleRouteVisualizer } from './JungleRouteVisualizer';
@@ -148,6 +149,22 @@ export const ChampionDetailView: React.FC<ChampionDetailViewProps> = ({
                 </button>
               ))}
             </div>
+
+            {/* OP.GG Load Preset Button */}
+            <button
+              onClick={() => {
+                if (confirm(`'${champion.koreanName}' (${currentLane}) 라인의 OP.GG 메타 추천 룬, 시작템, 코어 빌드, 스펠, 스킬 선마를 적용하시겠습니까?`)) {
+                  const opggBuild = generateDefaultBuild(champion, currentLane);
+                  setCurrentBuild(opggBuild);
+                  onSaveBuild(opggBuild);
+                }
+              }}
+              className="px-3 py-1.5 rounded-lg bg-sky-950/60 hover:bg-sky-900/80 text-sky-300 border border-sky-800/60 text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
+              title="OP.GG 추천 메타 빌드(룬, 시작템, 템트리, 스펠, 스킬 선마) 불러오기"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+              <span>OP.GG 메타 빌드 적용</span>
+            </button>
 
             {/* Change Lanes Button */}
             <button

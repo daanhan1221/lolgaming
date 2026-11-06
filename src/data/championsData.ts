@@ -1,4 +1,5 @@
 import { Champion, ChampionBuild, Lane } from "../types/lol";
+import { OPGG_PRESETS } from "./opggBuildsData";
 
 export const INITIAL_CHAMPIONS: Champion[] = [
   {
@@ -2597,66 +2598,33 @@ export const DEFAULT_JUNGLE_ROUTES = [
   }
 ];
 
-// 기본 빌드 헬퍼 함수
+// 기본 빌드 헬퍼 함수 (OP.GG 메타 데이터 반영)
 export function generateDefaultBuild(champion: Champion, lane: Lane): ChampionBuild {
+  // 1. OP.GG 사전 프리셋 확인
+  const preset = OPGG_PRESETS[champion.id]?.[lane] || OPGG_PRESETS[champion.id]?.[champion.primaryLane];
+  if (preset) {
+    return {
+      championId: champion.id,
+      lane,
+      startingItems: preset.startingItems,
+      coreItems: preset.coreItems,
+      situationalItems: preset.situationalItems,
+      spells: preset.spells,
+      skillOrder: preset.skillOrder,
+      runes: preset.runes,
+      jungleRoutes: lane === 'JUNGLE' ? DEFAULT_JUNGLE_ROUTES : undefined,
+      selectedJungleRouteId: lane === 'JUNGLE' ? 'blue_side_full_clear' : undefined,
+      counters: preset.counters,
+      playTips: preset.playTips,
+      lastUpdated: new Date().toISOString()
+    };
+  }
+
   const isJungle = lane === 'JUNGLE';
   const isMid = lane === 'MID';
   const isTop = lane === 'TOP';
   const isSupport = lane === 'SUPPORT';
   const isAdc = lane === 'ADC';
-
-  // 로크(Locke) 전용 빌드
-  if (champion.id === 'locke') {
-    return {
-      championId: 'locke',
-      lane,
-      startingItems: ['도란의 반지', '체력 물약', '와드 토템'],
-      coreItems: ['루덴의 동반자', '폭풍쇄도', '그림자불꽃', '마법사의 신발'],
-      situationalItems: ['존야의 모래시계', '라바돈의 죽음모자', '공허의 지팡이', '밴시의 장막'],
-      spells: ['점멸', '점화'],
-      skillOrder: 'Q > E > W > R',
-      skillMaxDetail: ['Q (은빛 대못): 주력 견제 및 표식 생성', 'E (잿빛 쇄도): 돌진 및 기동력', 'W (유물 결계): 생존 및 감속'],
-      runes: {
-        primaryPath: 'domination',
-        keystone: 'electrocute',
-        primarySlot1: 'sudden_impact',
-        primarySlot2: 'eyeball_collection',
-        primarySlot3: 'ultimate_hunter',
-        secondaryPath: 'sorcery',
-        secondarySlot1: 'nimbus_cloak',
-        secondarySlot2: 'scorch',
-        shardOffense: 'adaptive_force_1',
-        shardFlex: 'adaptive_force_2',
-        shardDefense: 'scaling_health_def'
-      },
-      counters: [
-        {
-          championId: 'syndra',
-          championName: '신드라',
-          difficulty: '어려움',
-          tip: '적의 E(적군 와해) 스턴이 빠지기 전 섣불리 E로 진입하면 역관광 당합니다. 상대 스킬 빗나간 타이밍에 파고드세요.'
-        },
-        {
-          championId: 'zed',
-          championName: '제드',
-          difficulty: '보통',
-          tip: '제드가 궁극기로 진입할 때 유물 결계를 깔고 역방향 대못으로 폭딜을 먼저 꽂아넣으면 유리합니다.'
-        },
-        {
-          championId: 'veigar',
-          championName: '베이가',
-          difficulty: '쉬움',
-          tip: '사건의 지평선 쿨타임 동안 뛰어난 기동력으로 일방적인 처형 콤보를 넣을 수 있습니다.'
-        }
-      ],
-      playTips: [
-        '기본 공격(은빛 말뚝)은 적의 잃은 체력 비례 마법 피해를 주므로, 스킬 연계 후 평타 마무리가 핵심입니다.',
-        'Q로 표식을 남긴 후 E로 파고들어 감전을 터뜨리고 빠져나오는 히트앤런 플레이가 가장 안전합니다.',
-        '한타 때는 적 딜러진에게 궁극기 봉인을 걸어 한타 시작과 동시에 5:4 구도를 만드세요.'
-      ],
-      lastUpdated: new Date().toISOString()
-    };
-  }
 
   // 일반 역할군별 지능형 기본 빌드
   if (champion.role === '암살자') {
