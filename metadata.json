@@ -1,0 +1,6 @@
+{
+  "name": "롤 챔피언 공략 및 피드백 연구소",
+  "description": "최신 챔피언 로크를 포함한 리그 오브 레전드 173개 챔피언 및 커스텀 챔피언 공략, 룬 세팅, 정글 동선, 피드백 일지 및 클라우드 동기화 시스템",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
