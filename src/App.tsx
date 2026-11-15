@@ -284,6 +284,7 @@ export default function App() {
               setSelectedChampion(null);
               setSelectedLane(undefined);
             }}
+            onSelectLane={(lane) => setSelectedLane(lane)}
             onOpenEditLanes={(champ) => setEditingLanesChampion(champ)}
             onSaveBuild={handleSaveBuild}
             feedbacks={feedbacks}

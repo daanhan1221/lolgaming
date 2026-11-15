@@ -1,6 +1,13 @@
 import { RunePath, StatShard } from '../types/lol';
 
+/**
+ * 리그 오브 레전드 룬 시스템 (나무위키 최신 공식 기준)
+ * https://namu.wiki/w/%EB%A6%AC%EA%B7%B8%20%EC%98%A4%EB%B8%8C%20%EB%A0%88%EC%A0%84%EB%93%9C/%EB%A3%AC
+ */
 export const RUNE_PATHS: Record<string, RunePath> = {
+  // ==========================================
+  // 1. 정밀 (Precision) - 데마시아 모티브
+  // ==========================================
   precision: {
     id: 'precision',
     name: '정밀',
@@ -14,14 +21,14 @@ export const RUNE_PATHS: Record<string, RunePath> = {
         id: 'press_the_attack',
         name: '집중 공격',
         englishName: 'Press the Attack',
-        description: '적 챔피언에게 연속으로 3회 기본 공격을 가하면 적에게 추가 적응형 피해를 입히고 8%의 추가 피해를 받게 합니다.',
+        description: '적 챔피언에게 연속으로 3회 기본 공격을 가하면 적에게 추가 적응형 피해를 입히고 전투 종료까지 8%의 추가 피해를 받게 합니다.',
         icon: '🎯'
       },
       {
         id: 'lethal_tempo',
         name: '치명적 속도',
         englishName: 'Lethal Tempo',
-        description: '적 챔피언 공격 시 공격 속도가 중첩되어 증가하며, 최대 중첩 시 추가 공격 속도 및 적중 시 마법 피해를 입힙니다.',
+        description: '적 챔피언 공격 시 공격 속도가 중첩되어 증가하며, 6중첩 도달 시 추가 공격 속도 및 적중 시 추가 적응형 피해를 입힙니다.',
         icon: '⚔️'
       },
       {
@@ -42,10 +49,11 @@ export const RUNE_PATHS: Record<string, RunePath> = {
     slots: [
       {
         slotIndex: 0,
+        slotName: '영웅',
         runes: [
           {
             id: 'absorb_life',
-            name: '흡수하는 생명력',
+            name: '생명 흡수',
             englishName: 'Absorb Life',
             description: '대상을 처치할 때마다 대상에 따라 일정량의 체력을 회복합니다.',
             icon: '🩸'
@@ -68,6 +76,7 @@ export const RUNE_PATHS: Record<string, RunePath> = {
       },
       {
         slotIndex: 1,
+        slotName: '전설',
         runes: [
           {
             id: 'legend_alacrity',
@@ -80,20 +89,21 @@ export const RUNE_PATHS: Record<string, RunePath> = {
             id: 'legend_haste',
             name: '전설: 가속',
             englishName: 'Legend: Haste',
-            description: '일반 스킬 가속을 영구히 획득하며 전설 중첩당 추가 일반 스킬 가속을 얻습니다.',
+            description: '일반 스킬 가속을 1.5 영구 획득하며, 전설 중첩당 추가 일반 스킬 가속을 1.5씩 얻습니다 (최대 15).',
             icon: '⏱️'
           },
           {
             id: 'legend_bloodline',
             name: '전설: 핏빛 길',
             englishName: 'Legend: Bloodline',
-            description: '전설 중첩당 생명력 흡수율을 획득하며 최대 중첩 시 최대 체력이 85 증가합니다.',
+            description: '전설 중첩당 생명력 흡수율 0.35%를 획득하며 최대 15중첩 완료 시 최대 체력이 85 증가합니다.',
             icon: '💉'
           }
         ]
       },
       {
         slotIndex: 2,
+        slotName: '전투',
         runes: [
           {
             id: 'coup_de_grace',
@@ -106,7 +116,7 @@ export const RUNE_PATHS: Record<string, RunePath> = {
             id: 'cut_down',
             name: '체력차 극복',
             englishName: 'Cut Down',
-            description: '최대 체력이 50%를 초과하는 적 챔피언에게 주는 피해량이 최대 8% 증가합니다.',
+            description: '체력이 60%를 초과하는 적 챔피언에게 주는 피해량이 8% 증가합니다.',
             icon: '⚖️'
           },
           {
@@ -120,6 +130,10 @@ export const RUNE_PATHS: Record<string, RunePath> = {
       }
     ]
   },
+
+  // ==========================================
+  // 2. 지배 (Domination) - 녹서스 모티브
+  // ==========================================
   domination: {
     id: 'domination',
     name: '지배',
@@ -127,7 +141,7 @@ export const RUNE_PATHS: Record<string, RunePath> = {
     color: '#DC2626',
     accentColor: '#FCA5A5',
     icon: '🔥',
-    description: '강력한 순간 피해 및 대상 접근',
+    description: '대상 추격 및 처치, 빠른 접근과 폭발적 피해',
     keystones: [
       {
         id: 'electrocute',
@@ -154,6 +168,7 @@ export const RUNE_PATHS: Record<string, RunePath> = {
     slots: [
       {
         slotIndex: 0,
+        slotName: '악의',
         runes: [
           {
             id: 'cheap_shot',
@@ -173,39 +188,41 @@ export const RUNE_PATHS: Record<string, RunePath> = {
             id: 'sudden_impact',
             name: '돌발 일격',
             englishName: 'Sudden Impact',
-            description: '돌진, 도약, 점멸, 순간이동을 사용하거나 은신에서 빠져나온 뒤 피해를 입히면 물리/마법 관통력을 얻습니다.',
+            description: '돌진, 도약, 점멸, 순간이동을 사용하거나 은신에서 빠져나온 뒤 피해를 입히면 추가 고정 피해를 입힙니다.',
             icon: '💥'
           }
         ]
       },
       {
         slotIndex: 1,
+        slotName: '추적',
         runes: [
           {
-            id: 'zombie_ward',
-            name: '좀비 와드',
-            englishName: 'Zombie Ward',
-            description: '적 와드를 파괴하면 그 자리에 아군 좀비 와드가 생성되고 영구 적응형 능력치를 얻습니다.',
-            icon: '🧟'
-          },
-          {
-            id: 'ghost_poro',
-            name: '유령 포로',
-            englishName: 'Ghost Poro',
-            description: '와드가 수명을 다하면 유령 포로가 남아 시야를 밝혀주며 발견 시 적응형 능력치를 얻습니다.',
-            icon: '👻'
-          },
-          {
-            id: 'eyeball_collection',
-            name: '사냥의 증표',
-            englishName: 'Eyeball Collection',
-            description: '챔피언 처치 관여 시마다 눈알을 수집하여 영구적으로 적응형 능력치를 획득합니다.',
+            id: 'sixth_sense',
+            name: '육감',
+            englishName: 'Sixth Sense',
+            description: '주변에 적이 설치한 보이지 않는 와드를 자동으로 감지하여 추적하며, 11레벨 달성 시 일정 시간 동안 해당 와드를 드러냅니다.',
             icon: '👁️'
+          },
+          {
+            id: 'eerie_souvenir',
+            name: '섬뜩한 기념품',
+            englishName: 'Eerie Souvenir',
+            description: '챔피언 처치 관여 시 기념품을 획득하며 (최대 18개), 수집한 기념품 하나당 장신구 가속을 6씩 얻습니다.',
+            icon: '💀'
+          },
+          {
+            id: 'deep_ward',
+            name: '깊은 와드',
+            englishName: 'Deep Ward',
+            description: '적 진영 쪽 정글에 설치한 와드의 체력과 지속 시간이 증가하며, 9레벨 이후에는 강가에 설치하는 와드에도 확대 적용됩니다.',
+            icon: '🕯️'
           }
         ]
       },
       {
         slotIndex: 2,
+        slotName: '사냥',
         runes: [
           {
             id: 'treasure_hunter',
@@ -232,6 +249,10 @@ export const RUNE_PATHS: Record<string, RunePath> = {
       }
     ]
   },
+
+  // ==========================================
+  // 3. 마법 (Sorcery) - 타곤 모티브
+  // ==========================================
   sorcery: {
     id: 'sorcery',
     name: '마법',
@@ -239,7 +260,7 @@ export const RUNE_PATHS: Record<string, RunePath> = {
     color: '#3B82F6',
     accentColor: '#93C5FD',
     icon: '🔮',
-    description: '스킬 및 자원 재생 특화',
+    description: '스킬 및 자원 재생 특화, 원거리 견제와 기동력',
     keystones: [
       {
         id: 'summon_aery',
@@ -259,20 +280,28 @@ export const RUNE_PATHS: Record<string, RunePath> = {
         id: 'phase_rush',
         name: '난입',
         englishName: 'Phase Rush',
-        description: '4초 안에 한 챔피언에게 개별 공격 3회를 적중시키면 폭발적인 이동 속도 및 둔화 저항을 얻습니다.',
+        description: '4초 안에 한 챔피언에게 기본 공격 또는 개별 스킬 3회를 적중시키면 3초 동안 이동 속도가 25~50% 대폭 증가하고 50%의 둔화 저항 효과를 얻습니다. (원거리 챔피언은 이동 속도 75% 적용, 재사용 대기시간 30~10초)',
         icon: '💨'
+      },
+      {
+        id: 'deathfire_touch',
+        name: '죽음불꽃 손길',
+        englishName: 'Deathfire Touch',
+        description: '공격 스킬로 적 챔피언에게 피해를 입히면 4초 동안 적응형 지속 마법 피해를 입힙니다. (광역 및 지속 피해 스킬은 지속 시간 및 피해량 절반 적용, 소환사 주문 및 아이템 효과 제외)',
+        icon: '🔥'
       }
     ],
     slots: [
       {
         slotIndex: 0,
+        slotName: '신비한 도구',
         runes: [
           {
-            id: 'nullifying_orb',
-            name: '무효화 구체',
-            englishName: 'Nullifying Orb',
-            description: '마법 피해를 받아 체력이 30% 이하로 떨어지면 마법 피해를 흡수하는 보호막을 생성합니다.',
-            icon: '🔮'
+            id: 'axiom_arcanist',
+            name: '액시옴 비전 마법사',
+            englishName: 'Axiom Arcanist',
+            description: '궁극기의 피해량, 회복량, 보호막이 12% 증가하며 적 챔피언 처치 관여 시 남은 궁극기 재사용 대기시간이 감소합니다.',
+            icon: '🌀'
           },
           {
             id: 'manaflow_band',
@@ -292,19 +321,20 @@ export const RUNE_PATHS: Record<string, RunePath> = {
       },
       {
         slotIndex: 1,
+        slotName: '초월한 힘',
         runes: [
           {
             id: 'transcendence',
             name: '깨달음',
             englishName: 'Transcendence',
-            description: '5레벨 및 8레벨 도달 시 스킬 가속을 획득하며, 11레벨 이후 챔피언 처치 관여 시 기본 스킬 재사용 대기시간이 감소합니다.',
+            description: '5레벨 및 8레벨 도달 시 스킬 가속 +5를 획득하며, 11레벨 이후 챔피언 처치 관여 시 기본 스킬 재사용 대기시간이 20% 감소합니다.',
             icon: '✨'
           },
           {
             id: 'celerity',
             name: '기민함',
             englishName: 'Celerity',
-            description: '모든 추가 이동 속도 효과가 7% 증가하며 이동 속도가 1% 증가합니다.',
+            description: '모든 추가 이동 속도 효과가 7% 증가하며 기본 이동 속도가 1% 증가합니다.',
             icon: '🌪️'
           },
           {
@@ -318,6 +348,7 @@ export const RUNE_PATHS: Record<string, RunePath> = {
       },
       {
         slotIndex: 2,
+        slotName: '힘의 결속',
         runes: [
           {
             id: 'scorch',
@@ -344,6 +375,10 @@ export const RUNE_PATHS: Record<string, RunePath> = {
       }
     ]
   },
+
+  // ==========================================
+  // 4. 결의 (Resolve) - 프렐요드 모티브
+  // ==========================================
   resolve: {
     id: 'resolve',
     name: '결의',
@@ -351,7 +386,7 @@ export const RUNE_PATHS: Record<string, RunePath> = {
     color: '#10B981',
     accentColor: '#A7F3D0',
     icon: '🛡️',
-    description: '내구력 및 군중 제어 강화',
+    description: '내구력 및 군중 제어 강화, 유지력과 생존',
     keystones: [
       {
         id: 'grasp_of_the_undying',
@@ -378,6 +413,7 @@ export const RUNE_PATHS: Record<string, RunePath> = {
     slots: [
       {
         slotIndex: 0,
+        slotName: '생명력',
         runes: [
           {
             id: 'demolish',
@@ -390,7 +426,7 @@ export const RUNE_PATHS: Record<string, RunePath> = {
             id: 'font_of_life',
             name: '생명의 샘',
             englishName: 'Font of Life',
-            description: '적 챔피언의 이동을 방해하면 표식을 남기며, 아군이 해당 적을 공격 시 체력을 지속 회복합니다.',
+            description: '적 챔피언에게 이동 방해(CC) 스킬을 적중시키면 자신 및 근처 아군의 체력을 회복시킵니다.',
             icon: '🌿'
           },
           {
@@ -404,6 +440,7 @@ export const RUNE_PATHS: Record<string, RunePath> = {
       },
       {
         slotIndex: 1,
+        slotName: '저항력',
         runes: [
           {
             id: 'conditioning',
@@ -430,6 +467,7 @@ export const RUNE_PATHS: Record<string, RunePath> = {
       },
       {
         slotIndex: 2,
+        slotName: '생명력 회복',
         runes: [
           {
             id: 'overgrowth',
@@ -449,13 +487,17 @@ export const RUNE_PATHS: Record<string, RunePath> = {
             id: 'unflinching',
             name: '불굴의 의지',
             englishName: 'Unflinching',
-            description: '이동 불가 또는 둔화 상태가 될 때 방어력과 마법 저항력이 일시 증가합니다.',
+            description: '이동 방해를 받거나 행동 제어 효과에 걸렸을 때 방어력 및 마법 저항력이 증가합니다.',
             icon: '🧗'
           }
         ]
       }
     ]
   },
+
+  // ==========================================
+  // 5. 영감 (Inspiration) - 필트오버/자운 모티브
+  // ==========================================
   inspiration: {
     id: 'inspiration',
     name: '영감',
@@ -463,7 +505,7 @@ export const RUNE_PATHS: Record<string, RunePath> = {
     color: '#06B6D4',
     accentColor: '#A5F3FC',
     icon: '💡',
-    description: '창의적인 도구 및 규칙 비틀기',
+    description: '창의적인 도구 및 규칙 비틀기, 자원과 골드 수급',
     keystones: [
       {
         id: 'glacial_augment',
@@ -490,6 +532,7 @@ export const RUNE_PATHS: Record<string, RunePath> = {
     slots: [
       {
         slotIndex: 0,
+        slotName: '기묘한 장치',
         runes: [
           {
             id: 'hextech_flashtraption',
@@ -507,22 +550,30 @@ export const RUNE_PATHS: Record<string, RunePath> = {
           },
           {
             id: 'cash_back',
-            name: '현금 지원',
+            name: '환급',
             englishName: 'Cash Back',
-            description: '전설 아이템 구매 시 구매 금액의 6%를 골드로 페이백 환급받습니다.',
+            description: '전설급 아이템 구매 시 구매 금액의 6%를 골드로 돌려받습니다.',
             icon: '🪙'
           }
         ]
       },
       {
         slotIndex: 1,
+        slotName: '미래의 힘',
         runes: [
           {
             id: 'triple_tonic',
             name: '삼중 물약',
             englishName: 'Triple Tonic',
-            description: '3레벨, 6레벨, 9레벨 도달 시 특별한 엘릭서(골드/스킬 포인트/적응형 능력치)를 무료로 획득합니다.',
+            description: '3레벨(골드), 6레벨(스킬 포인트), 9레벨(적응형 능력치) 도달 시 특별한 영약을 무료로 획득합니다.',
             icon: '🧪'
+          },
+          {
+            id: 'time_warp_tonic',
+            name: '시간 왜곡 물약',
+            englishName: 'Time Warp Tonic',
+            description: '물약이나 비스킷 사용 시 회복량의 40%를 즉시 회복하며 지속 시간 동안 이동 속도가 2% 증가합니다.',
+            icon: '⏳'
           },
           {
             id: 'biscuit_delivery',
@@ -530,18 +581,12 @@ export const RUNE_PATHS: Record<string, RunePath> = {
             englishName: 'Biscuit Delivery',
             description: '6분까지 2분마다 무료 비스킷을 획득합니다. 사용 시 잃은 체력과 마나를 회복하고 최대 마나가 영구 증가합니다.',
             icon: '🍪'
-          },
-          {
-            id: 'time_warp_tonic',
-            name: '시간 왜곡 물약',
-            englishName: 'Time Warp Tonic',
-            description: '물약이나 비스킷 사용 시 회복량의 일부를 즉시 회복하며 이동 속도가 소폭 상승합니다.',
-            icon: '⏳'
           }
         ]
       },
       {
         slotIndex: 2,
+        slotName: '천상의 힘',
         runes: [
           {
             id: 'cosmic_insight',
@@ -561,7 +606,7 @@ export const RUNE_PATHS: Record<string, RunePath> = {
             id: 'jack_of_all_trades',
             name: '다재다능',
             englishName: 'Jack of All Trades',
-            description: '아이템 구매를 통해 다양한 종류의 고유 능력치 능력치를 얻을 때마다 중첩당 스킬 가속과 적응형 능력치를 획득합니다.',
+            description: '아이템 구매를 통해 다양한 종류의 고유 능력치를 얻을 때마다 중첩당 스킬 가속과 적응형 능력치를 획득합니다.',
             icon: '🃏'
           }
         ]
@@ -570,6 +615,9 @@ export const RUNE_PATHS: Record<string, RunePath> = {
   }
 };
 
+/**
+ * 능력치 파편 (나무위키 최신 공식 기준: 공격, 유연, 방어 3열)
+ */
 export const STAT_SHARDS: {
   offense: StatShard[];
   flex: StatShard[];
@@ -580,7 +628,7 @@ export const STAT_SHARDS: {
       id: 'adaptive_force_1',
       name: '적응형 능력치',
       category: 'offense',
-      description: '적응형 능력치 +9 (공격력 5.4 또는 주문력 9)',
+      description: '적응형 능력치 +9 (공격력 +5.4 또는 주문력 +9)',
       icon: '⚔️'
     },
     {
@@ -603,14 +651,14 @@ export const STAT_SHARDS: {
       id: 'adaptive_force_2',
       name: '적응형 능력치',
       category: 'flex',
-      description: '적응형 능력치 +9 (공격력 5.4 또는 주문력 9)',
+      description: '적응형 능력치 +9 (공격력 +5.4 또는 주문력 +9)',
       icon: '⚔️'
     },
     {
       id: 'move_speed',
       name: '이동 속도',
       category: 'flex',
-      description: '이동 속도 +2%',
+      description: '이동 속도 +2.5%',
       icon: '👟'
     },
     {
@@ -626,14 +674,14 @@ export const STAT_SHARDS: {
       id: 'flat_health',
       name: '체력',
       category: 'defense',
-      description: '기본 체력 +65',
+      description: '기본 체력 +65 (고정 체력)',
       icon: '🛡️'
     },
     {
       id: 'tenacity_slow_resist',
       name: '강인함 및 둔화 저항',
       category: 'defense',
-      description: '강인함 및 둔화 저항 +10%',
+      description: '강인함 및 둔화 저항 +15%',
       icon: '🧗'
     },
     {

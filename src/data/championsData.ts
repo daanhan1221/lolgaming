@@ -10,6 +10,7 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "role": "암살자",
     "lanes": [
       "MID",
+      "JUNGLE",
       "TOP"
     ],
     "primaryLane": "MID",
@@ -24,7 +25,8 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "다르킨의 검",
     "role": "전사",
     "lanes": [
-      "TOP"
+      "TOP",
+      "JUNGLE"
     ],
     "primaryLane": "TOP",
     "difficulty": "보통",
@@ -111,10 +113,10 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "슬픈 미라",
     "role": "탱커",
     "lanes": [
-      "JUNGLE",
-      "SUPPORT"
+      "SUPPORT",
+      "JUNGLE"
     ],
-    "primaryLane": "JUNGLE",
+    "primaryLane": "SUPPORT",
     "difficulty": "쉬움",
     "avatarUrl": "https://ddragon.leagueoflegends.com/cdn/16.22.1/img/champion/Amumu.png",
     "notes": "뼛속까지 사무치는 외로움과 쓸쓸함 속에 살아가는 아무무. 평생을 오로지 마음을 나눌 수 있는 단 한 명의 친구를 찾아 헤매는, 고대 슈리마 제국의 가엾은 영혼이다. 끔찍한 저주를 받은 아무무는 영원히 혼자인 채로 남겨졌다. 그 저주란 지독하리만큼 잔인한 것이었다. 상대가 누구든 아무무와의 신체적 접촉은 죽음을 의미했고 정서적 교류는 파멸을 불러왔다. 그의 운명을 아는 한 누구도 그를 가까이하려 들지 않았다. 간혹 아무무를 봤다는 이들은 그를 두고..."
@@ -126,7 +128,9 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "얼음불사조",
     "role": "마법사",
     "lanes": [
-      "MID"
+      "MID",
+      "TOP",
+      "SUPPORT"
     ],
     "primaryLane": "MID",
     "difficulty": "매우 어려움",
@@ -344,6 +348,7 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "role": "마법사",
     "lanes": [
       "MID",
+      "ADC",
       "TOP"
     ],
     "primaryLane": "MID",
@@ -358,10 +363,11 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "공허의 공포",
     "role": "마법사",
     "lanes": [
+      "JUNGLE",
       "TOP",
       "MID"
     ],
-    "primaryLane": "TOP",
+    "primaryLane": "JUNGLE",
     "difficulty": "보통",
     "avatarUrl": "https://ddragon.leagueoflegends.com/cdn/16.22.1/img/champion/Chogath.png",
     "notes": "공허에서 나온 생명체 초가스는 룬테라의 따가운 햇빛 아래 처음 모습을 드러낸 순간부터, 그 무엇으로도 만족시킬 수 없는 가장 순수한 굶주림에 이끌려 움직였다. 그 존재 자체가 모든 생명체를 집어삼키려는 공허의 욕망을 온전하게 드러내는 것이다. 초가스는 복잡한 생체 활동을 통해 주변 물질에서 새로운 몸을 만들어냈고, 근육과 밀도를 키웠으며, 유기체 다이아몬드처럼 딱딱한 겉껍질로 몸을 덮었다. 하지만 몸집이 커져도 허기를 채울 수 없자, 초가스는 여분의..."
@@ -373,10 +379,11 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "대담한 폭격수",
     "role": "마법사",
     "lanes": [
-      "MID",
-      "ADC"
+      "ADC",
+      "TOP",
+      "MID"
     ],
-    "primaryLane": "MID",
+    "primaryLane": "ADC",
     "difficulty": "보통",
     "avatarUrl": "https://ddragon.leagueoflegends.com/cdn/16.22.1/img/champion/Corki.png",
     "notes": "요들 비행기 조종사 코르키는 다른 어떤 것보다 좋아하는 두 가지가 있다. 바로 비행과 멋들어진 콧수염이다. 좋아하는 순서대로 나열한 것은 아니지만. 코르키는 밴들 시티를 떠난 후 필트오버에 정착하며 찾아낸 경이로운 비행기와 사랑에 빠졌다. 코르키는 비행장치를 개발하기 위해 혼신의 노력을 쏟았고, 시끄러운 뱀 편대라 불리는 베테랑 공군 정예 부대를 이끌게 되었다. 포화 속에서도 평정심을 잃지 않으며 제2의 고향의 창공을 누비는 코르키에게 마음껏 미사일..."
@@ -402,10 +409,10 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "차가운 달의 분노",
     "role": "암살자",
     "lanes": [
-      "JUNGLE",
-      "MID"
+      "MID",
+      "JUNGLE"
     ],
-    "primaryLane": "JUNGLE",
+    "primaryLane": "MID",
     "difficulty": "보통",
     "avatarUrl": "https://ddragon.leagueoflegends.com/cdn/16.22.1/img/champion/Diana.png",
     "notes": "다이애나는 오늘날 거의 사멸된 고대 종교 '루나리'의 전사이자, 은빛 달의 화신 그 자체다. 그녀는 드높은 타곤 산 꼭대기에 떠오른 천체들의 기운을 온몸으로 받아들였고, 겨울 밤 설원처럼 은은하게 빛나는 갑옷과 초승달 검으로 무장했다. 그러나 인간을 초월한 그녀의 힘이 무엇을 위한 것인지는 아직까지 분명하지 않다. 다이애나는 이 세상에서 자신에게 부여된 사명이 무엇인지 알아내려 애쓰고 있다."
@@ -461,7 +468,8 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "거미 여왕",
     "role": "암살자",
     "lanes": [
-      "JUNGLE"
+      "JUNGLE",
+      "SUPPORT"
     ],
     "primaryLane": "JUNGLE",
     "difficulty": "매우 어려움",
@@ -504,9 +512,10 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "오래된 공포",
     "role": "마법사",
     "lanes": [
+      "JUNGLE",
       "SUPPORT"
     ],
-    "primaryLane": "SUPPORT",
+    "primaryLane": "JUNGLE",
     "difficulty": "매우 어려움",
     "avatarUrl": "https://ddragon.leagueoflegends.com/cdn/16.22.1/img/champion/Fiddlesticks.png",
     "notes": "룬테라에 무시무시한 고대의 무언가가 깨어났다. 시간을 초월한 공포의 존재 피들스틱은 불안에 동요하는 인간 사회의 끝자락에 나타나 겁먹은 희생자들을 양분으로 삼는다. 앙상하고 투박한 모습의 이 생물은 삐죽삐죽한 낫을 휘두르며 공포를 거둬들이고, 살아남은 불행한 자들의 정신을 산산이 조각낸다. 까마귀 울음소리와 인간을 닮은 형상의 속삭임을 조심하라... 피들스틱이 돌아온 것이다."
@@ -532,7 +541,8 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "대양의 말썽꾸러기",
     "role": "암살자",
     "lanes": [
-      "MID"
+      "MID",
+      "JUNGLE"
     ],
     "primaryLane": "MID",
     "difficulty": "보통",
@@ -784,6 +794,7 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "role": "원거리 딜러",
     "lanes": [
       "TOP",
+      "JUNGLE",
       "MID"
     ],
     "primaryLane": "TOP",
@@ -900,7 +911,8 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "사악한 칼날",
     "role": "암살자",
     "lanes": [
-      "MID"
+      "MID",
+      "ADC"
     ],
     "primaryLane": "MID",
     "difficulty": "어려움",
@@ -1031,7 +1043,8 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "환술사",
     "role": "암살자",
     "lanes": [
-      "MID"
+      "MID",
+      "SUPPORT"
     ],
     "primaryLane": "MID",
     "difficulty": "매우 어려움",
@@ -1089,7 +1102,8 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "얼음 마녀",
     "role": "마법사",
     "lanes": [
-      "MID"
+      "MID",
+      "TOP"
     ],
     "primaryLane": "MID",
     "difficulty": "보통",
@@ -1193,7 +1207,8 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "우주 검사",
     "role": "암살자",
     "lanes": [
-      "JUNGLE"
+      "JUNGLE",
+      "TOP"
     ],
     "primaryLane": "JUNGLE",
     "difficulty": "보통",
@@ -1297,10 +1312,10 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "백 번 무는 사냥개",
     "role": "암살자",
     "lanes": [
-      "MID",
-      "JUNGLE"
+      "JUNGLE",
+      "MID"
     ],
-    "primaryLane": "MID",
+    "primaryLane": "JUNGLE",
     "difficulty": "쉬움",
     "avatarUrl": "https://ddragon.leagueoflegends.com/cdn/16.22.1/img/champion/Naafiri.png",
     "notes": "오늘도 슈리마 사막에는 우렁찬 포효가 합창곡처럼 울려 퍼진다. 게걸스러운 포식자인 모래 언덕의 사냥개들이 이 황량한 땅에서 무리지어 사냥할 권리를 두고 싸우며 울부짖는 소리다. 그중 정점에 오른 무리가 있다. 사냥개의 본능이 아니라, 고대 다르킨의 힘을 품고 움직이는 무리 말이다."
@@ -1354,11 +1369,11 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "알쏭달쏭 카멜레온",
     "role": "마법사",
     "lanes": [
-      "MID",
       "SUPPORT",
+      "MID",
       "TOP"
     ],
-    "primaryLane": "MID",
+    "primaryLane": "SUPPORT",
     "difficulty": "보통",
     "avatarUrl": "https://ddragon.leagueoflegends.com/cdn/16.22.1/img/champion/Neeko.png",
     "notes": "오랜 세월 잊힌 바스타야의 한 부족 출신인 니코는 다른 이의 모습을 빌려 어느 무리에든 뒤섞일 수 있으며, 심지어 상대의 감정을 흡수하여 적과 아군을 한눈에 구분할 수 있다. 그 누구도 니코가 어디 있는지, 정체가 무엇인지 확신할 수 없지만, 악의를 가지고 접근하는 자는 원초적 영혼 마법의 무시무시한 힘과 함께 그녀의 진정한 모습을 보게 될 것이다."
@@ -1413,7 +1428,8 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "소년과 설인",
     "role": "마법사",
     "lanes": [
-      "JUNGLE"
+      "JUNGLE",
+      "MID"
     ],
     "primaryLane": "JUNGLE",
     "difficulty": "보통",
@@ -1471,9 +1487,9 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "role": "암살자",
     "lanes": [
       "TOP",
-      "MID",
       "SUPPORT",
-      "JUNGLE"
+      "JUNGLE",
+      "MID"
     ],
     "primaryLane": "TOP",
     "difficulty": "보통",
@@ -1487,11 +1503,11 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "망치의 수호자",
     "role": "탱커",
     "lanes": [
-      "JUNGLE",
+      "SUPPORT",
       "TOP",
-      "SUPPORT"
+      "JUNGLE"
     ],
-    "primaryLane": "JUNGLE",
+    "primaryLane": "SUPPORT",
     "difficulty": "보통",
     "avatarUrl": "https://ddragon.leagueoflegends.com/cdn/16.22.1/img/champion/Poppy.png",
     "notes": "룬테라에는 용맹한 챔피언이 넘쳐나지만 뽀삐만큼 끈기 넘치는 이는 찾아보기 힘들다. 제 키의 두 배는 되는 망치 오를론을 들고 다니는 뽀삐는 오랫동안 망치의 정당한 주인이자 전설의 주인공인 데마시아의 영웅을 찾아 비밀스럽게 헤매고 있다. 그 때까지 뽀삐는 충실히 전투로 돌격해 망치를 크게 휘둘러 왕국의 적을 모두 날려 버린다."
@@ -1518,10 +1534,10 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "원소의 여왕",
     "role": "암살자",
     "lanes": [
-      "MID",
-      "JUNGLE"
+      "JUNGLE",
+      "MID"
     ],
-    "primaryLane": "MID",
+    "primaryLane": "JUNGLE",
     "difficulty": "어려움",
     "avatarUrl": "https://ddragon.leagueoflegends.com/cdn/16.22.1/img/champion/Qiyana.png",
     "notes": "키아나는 정글 도시 이샤오칸에서 윤 탈의 왕좌에 오르기 위해 무자비한 계획을 세우고 있다. 부모님의 왕위 계승 서열 중 가장 아래인 키아나는 당당한 자신감과 전례 없는 원소 마법 능력을 갖춘 인재로, 앞을 가로막는 자는 누구든 용서하지 않는다. 키아나는 대지 자체를 자유자재로 조종할 수 있으며, 자신을 이샤오칸 역사상 가장 뛰어난 원소술사로 여긴다. 그렇기에 자신에게 일개 도시가 아닌 제국을 지배할 자격이 있다고 믿는다."
@@ -1534,6 +1550,7 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "role": "암살자",
     "lanes": [
       "TOP",
+      "JUNGLE",
       "MID"
     ],
     "primaryLane": "TOP",
@@ -1830,7 +1847,8 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "언데드 학살병기",
     "role": "탱커",
     "lanes": [
-      "TOP"
+      "TOP",
+      "MID"
     ],
     "primaryLane": "TOP",
     "difficulty": "보통",
@@ -1858,10 +1876,11 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "태고의 군주",
     "role": "탱커",
     "lanes": [
-      "TOP",
-      "JUNGLE"
+      "JUNGLE",
+      "SUPPORT",
+      "TOP"
     ],
-    "primaryLane": "TOP",
+    "primaryLane": "JUNGLE",
     "difficulty": "보통",
     "avatarUrl": "https://ddragon.leagueoflegends.com/cdn/16.22.1/img/champion/Skarner.png",
     "notes": "거대한 고대 브래컨, 스카너는 지배 계급인 윤 탈의 창립 일원으로 이쉬탈에서 추앙받는다. 자신의 나라를 외부 세계로부터 안전하게 지키기 위해 헌신하는 스카너는 이샤오칸 아래 내실에서 살아가며 대지의 진동에 귀를 기울이고 잠재적 위협을 감지한다. 이쉬탈의 고립에 의문을 품는 윤 탈의 구성원이 많아지면서 스카너의 편집증은 갈수록 심해지고 있다. 이쉬탈과 이쉬탈 사람들의 안전을 지키기 위해서라면 스카너는 무엇이든 할 것이다. 어떤 대가가 따르더라도."
@@ -1916,11 +1935,12 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "녹서스 대장군",
     "role": "마법사",
     "lanes": [
-      "MID",
       "SUPPORT",
-      "ADC"
+      "ADC",
+      "MID",
+      "TOP"
     ],
-    "primaryLane": "MID",
+    "primaryLane": "SUPPORT",
     "difficulty": "어려움",
     "avatarUrl": "https://ddragon.leagueoflegends.com/cdn/16.22.1/img/champion/Swain.png",
     "notes": "제리코 스웨인은 오로지 힘만을 숭상하는 확장주의 국가 녹서스를 탁월한 예지력으로 이끄는 지도자다. 아이오니아 전쟁에서 부상을 당해 절름발이가 되고 왼팔을 잃었지만, 가차 없는 결단력으로 제국을 통치하는 자리에까지 올랐다. 악마에게 새로이 받은 왼팔과, 그 못지않게 악마 같은 수를 써서… 이제 스웨인은 최전선에서 군을 지휘하며 자신만이 볼 수 있는 어둠, 주변에 흩어진 시체에 몰려든 새까만 까마귀들에서 얼핏얼핏 목격한 광경이 다가오는 것에 대비하고..."
@@ -1933,8 +1953,9 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "role": "암살자",
     "lanes": [
       "MID",
-      "TOP",
-      "JUNGLE"
+      "JUNGLE",
+      "SUPPORT",
+      "TOP"
     ],
     "primaryLane": "MID",
     "difficulty": "보통",
@@ -1993,10 +2014,10 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "검의 그림자",
     "role": "암살자",
     "lanes": [
-      "MID",
-      "JUNGLE"
+      "JUNGLE",
+      "MID"
     ],
-    "primaryLane": "MID",
+    "primaryLane": "JUNGLE",
     "difficulty": "어려움",
     "avatarUrl": "https://ddragon.leagueoflegends.com/cdn/16.22.1/img/champion/Talon.png",
     "notes": "탈론은 음지에서 암약하는 무자비한 자객이다. 불의의 일격을 가하는 데에도, 이상한 낌새가 느껴지기도 전에 자취를 감추는 데도 능하다. 거칠기 짝이 없는 녹서스의 거리에서 싸우고, 상대를 처치하고, 도둑질을 하면서 살아남았고 위험한 존재라는 명성을 쌓았다. 악명이 자자한 뒤 쿠토 가문에 발탁된 뒤로는 녹서스 제국의 명을 받들어 적의 지도자, 대장, 영웅은 물론이고, 감히 자신이 섬기는 주인의 심기를 거스르는 녹서스 인마저도 종횡무진 암살하고 있다."
@@ -2155,6 +2176,7 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "role": "마법사",
     "lanes": [
       "ADC",
+      "TOP",
       "MID"
     ],
     "primaryLane": "ADC",
@@ -2169,10 +2191,10 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "어둠 사냥꾼",
     "role": "암살자",
     "lanes": [
-      "ADC",
-      "TOP"
+      "TOP",
+      "ADC"
     ],
-    "primaryLane": "ADC",
+    "primaryLane": "TOP",
     "difficulty": "어려움",
     "avatarUrl": "https://ddragon.leagueoflegends.com/cdn/16.22.1/img/champion/Vayne.png",
     "notes": "가차 없는 괴물 사냥꾼 샤우나 베인은 가족을 몰살한 마녀를 찾아 죽이기로 맹세했다. 손목에 장착된 석궁과 복수심에 불타는 마음으로 무장한 베인이 진정 행복할 때는 오직 그림자 속에서 질풍처럼 은화살을 날려 흑마법을 연구하는 자나 흑마법이 만들어낸 창조물을 벨 때뿐이다."
@@ -2257,7 +2279,8 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "아케인의 전령관",
     "role": "마법사",
     "lanes": [
-      "MID"
+      "MID",
+      "ADC"
     ],
     "primaryLane": "MID",
     "difficulty": "매우 어려움",
@@ -2331,7 +2354,8 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "role": "마법사",
     "lanes": [
       "SUPPORT",
-      "MID"
+      "MID",
+      "ADC"
     ],
     "primaryLane": "SUPPORT",
     "difficulty": "어려움",
@@ -2375,10 +2399,10 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "잊히지 못한 자",
     "role": "암살자",
     "lanes": [
-      "MID",
-      "TOP"
+      "TOP",
+      "MID"
     ],
-    "primaryLane": "MID",
+    "primaryLane": "TOP",
     "difficulty": "어려움",
     "avatarUrl": "https://ddragon.leagueoflegends.com/cdn/16.22.1/img/champion/Yone.png",
     "notes": "생전에 야스오의 이부형제였던 요네는 마을 검술 학교에서 촉망받는 학생이었다. 그러나 형제의 손에 죽음을 맞이한 후 영혼 세계의 악령에 쫓기자 악령의 검으로 악령을 죽일 수밖에 없었다. 악령의 가면을 써야 하는 저주를 받게 된 요네는 자신이 어떤 존재가 되었는지 알아내기 위해 쉬지 않고 그 악령과 같은 존재들을 뒤쫓는다."
@@ -2432,7 +2456,8 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "저물지 않는 자",
     "role": "전사",
     "lanes": [
-      "TOP"
+      "TOP",
+      "JUNGLE"
     ],
     "primaryLane": "TOP",
     "difficulty": "쉬움",
@@ -2536,10 +2561,11 @@ export const INITIAL_CHAMPIONS: Champion[] = [
     "title": "가시 덩굴의 복수",
     "role": "마법사",
     "lanes": [
+      "JUNGLE",
       "SUPPORT",
       "MID"
     ],
-    "primaryLane": "SUPPORT",
+    "primaryLane": "JUNGLE",
     "difficulty": "어려움",
     "avatarUrl": "https://ddragon.leagueoflegends.com/cdn/16.22.1/img/champion/Zyra.png",
     "notes": "자이라는 고대의 어떤 마법 대재앙에서 태어났다. 자연의 분노가 그대로 형상화된 생명체이자 인간과 식물의 매혹적인 혼종이다. 자이라가 한 걸음 내디딜 때마다 발밑에는 새로운 생명이 피어난다. 발로란의 수많은 필멸자를 자신의 씨앗에서 태어난 후손의 먹잇감 정도로 여기므로, 치명적인 위력의 가시를 날려 필멸자를 거침없이 사냥한다. 또한 자이라는 발로란 여기저기에 식육 식물 군락을 만들어 놓는데, 이 군락은 주변의 다른 생명체를 모조리 휘감아 죽이며 세력을..."
@@ -2599,24 +2625,30 @@ export const DEFAULT_JUNGLE_ROUTES = [
 ];
 
 // 기본 빌드 헬퍼 함수 (OP.GG 메타 데이터 반영)
+// 기본 빌드 헬퍼 함수 (OP.GG 메타 데이터 반영)
 export function generateDefaultBuild(champion: Champion, lane: Lane): ChampionBuild {
-  // 1. OP.GG 사전 프리셋 확인
-  const preset = OPGG_PRESETS[champion.id]?.[lane] || OPGG_PRESETS[champion.id]?.[champion.primaryLane];
-  if (preset) {
+  const champIdLower = champion.id.toLowerCase();
+  const champNameLower = champion.name.toLowerCase();
+
+  // 1. 해당 챔피언 & 라인의 OP.GG 사전 프리셋 확인
+  const championPresets = OPGG_PRESETS[champion.id] || OPGG_PRESETS[champIdLower] || OPGG_PRESETS[champNameLower];
+  const exactPreset = championPresets ? championPresets[lane] : undefined;
+  if (exactPreset) {
     return {
       championId: champion.id,
       lane,
-      startingItems: preset.startingItems,
-      coreItems: preset.coreItems,
-      situationalItems: preset.situationalItems,
-      spells: preset.spells,
-      skillOrder: preset.skillOrder,
-      runes: preset.runes,
+      startingItems: exactPreset.startingItems,
+      coreItems: exactPreset.coreItems,
+      situationalItems: exactPreset.situationalItems,
+      spells: exactPreset.spells,
+      skillOrder: exactPreset.skillOrder,
+      runes: exactPreset.runes,
       jungleRoutes: lane === 'JUNGLE' ? DEFAULT_JUNGLE_ROUTES : undefined,
       selectedJungleRouteId: lane === 'JUNGLE' ? 'blue_side_full_clear' : undefined,
-      counters: preset.counters,
-      playTips: preset.playTips,
-      lastUpdated: new Date().toISOString()
+      counters: exactPreset.counters,
+      playTips: exactPreset.playTips,
+      lastUpdated: new Date().toISOString(),
+      presetVersion: 'opgg_kr_emerald_16_22'
     };
   }
 
@@ -2626,51 +2658,86 @@ export function generateDefaultBuild(champion: Champion, lane: Lane): ChampionBu
   const isSupport = lane === 'SUPPORT';
   const isAdc = lane === 'ADC';
 
-  // 일반 역할군별 지능형 기본 빌드
-  if (champion.role === '암살자') {
-    return {
-      championId: champion.id,
-      lane,
-      startingItems: isJungle ? ['바람돌이 새끼', '체력 물약'] : ['도란의 검', '체력 물약', '와드 토템'],
-      coreItems: isJungle ? ['불경한 히드라', '요우무의 유령검', '기회', '명석함의 아이오니아 장화'] : ['요우무의 유령검', '기회', '밤의 끝자락', '명석함의 아이오니아 장화'],
-      situationalItems: ['도미닉 경의 인사', '원칙의 원형낫', '수호 천사', '맬모셔스의 아귀'],
-      spells: isJungle ? ['강타', '점멸'] : ['점멸', '점화'],
-      skillOrder: 'Q > E > W > R',
-      runes: {
-        primaryPath: 'domination',
-        keystone: 'electrocute',
-        primarySlot1: 'sudden_impact',
-        primarySlot2: 'eyeball_collection',
-        primarySlot3: 'treasure_hunter',
-        secondaryPath: 'precision',
-        secondarySlot1: 'triumph',
-        secondarySlot2: 'coup_de_grace',
-        shardOffense: 'adaptive_force_1',
-        shardFlex: 'adaptive_force_2',
-        shardDefense: 'scaling_health_def'
-      },
-      jungleRoutes: isJungle ? DEFAULT_JUNGLE_ROUTES : undefined,
-      selectedJungleRouteId: isJungle ? 'blue_side_full_clear' : undefined,
-      counters: [
-        { championId: 'malphite', championName: '말파이트', difficulty: '어려움', tip: '단단한 방어력과 CC기로 인해 암살이 어렵습니다. 방어구 관통력과 로밍으로 승부하세요.' },
-        { championId: 'jinx', championName: '징크스', difficulty: '쉬움', tip: '도주기가 없는 원딜이므로 시야를 지우고 기습하면 손쉽게 처치 가능합니다.' }
-      ],
-      playTips: [
-        '암흑 시야를 선점하여 적 딜러의 이동 경로를 차단하세요.',
-        '스킬 쿨타임이 돌 때는 무리하게 평타를 치지 말고 치고 빠지기를 반복하세요.'
-      ],
-      lastUpdated: new Date().toISOString()
-    };
-  }
+  // 2. 서포터 라인 (SUPPORT)
+  if (isSupport) {
+    const enchanterList = ['renata', 'renataglasc', 'lulu', 'nami', 'janna', 'soraka', 'sona', 'yuumi', 'milio', 'seraphine', 'karma', 'taric', 'bard', 'senna', 'rakan'];
+    const tankSupportList = ['nautilus', 'leona', 'blitzcrank', 'thresh', 'alistar', 'braum', 'rell', 'tahmkench', 'shen', 'poppy', 'maokai', 'amumu'];
+    const isEnchanter = enchanterList.includes(champIdLower) || enchanterList.includes(champNameLower);
+    const isTankSup = tankSupportList.includes(champIdLower) || tankSupportList.includes(champNameLower) || champion.role === '탱커';
 
-  if (champion.role === '마법사') {
+    if (isEnchanter) {
+      const isGuardianEnchanter = ['renata', 'renataglasc', 'taric', 'rakan'].includes(champIdLower);
+      return {
+        championId: champion.id,
+        lane,
+        startingItems: ['세계 지도집', '체력 물약', '체력 물약'],
+        coreItems: ['강철의 솔라리 펜던트', '슈렐리아의 군가', '구원', '명석함의 아이오니아 장화'],
+        situationalItems: ['기사의 맹세', '지크의 융합', '얼어붙은 심장', '미카엘의 축복', '경계의 와드석'],
+        spells: ['점멸', '탈진'],
+        skillOrder: champIdLower.includes('renata') ? 'E > W > Q > R' : 'E > W > Q > R',
+        runes: {
+          primaryPath: isGuardianEnchanter ? 'resolve' : 'sorcery',
+          keystone: isGuardianEnchanter ? 'guardian' : 'summon_aery',
+          primarySlot1: isGuardianEnchanter ? 'shield_bash' : 'manaflow_band',
+          primarySlot2: isGuardianEnchanter ? 'bone_plating' : 'transcendence',
+          primarySlot3: isGuardianEnchanter ? 'revitalize' : 'scorch',
+          secondaryPath: 'inspiration',
+          secondarySlot1: 'biscuit_delivery',
+          secondarySlot2: 'cosmic_insight',
+          shardOffense: 'ability_haste',
+          shardFlex: 'scaling_health_flex',
+          shardDefense: 'scaling_health_def'
+        },
+        counters: [
+          { championId: 'nautilus', championName: '노틸러스', difficulty: '어려움', tip: '그랩 사거리를 항상 주시하고 거리 조절을 유지하세요.' }
+        ],
+        playTips: [
+          '시야 주도권을 잡고 원딜 곁에서 보호막과 버프를 제공하며 한타 생존력을 극대화하세요.'
+        ],
+        lastUpdated: new Date().toISOString()
+      };
+    }
+
+    if (isTankSup) {
+      return {
+        championId: champion.id,
+        lane,
+        startingItems: ['세계 지도의 정석', '체력 물약', '체력 물약'],
+        coreItems: ['개척자', '지크의 융합', '기사의 맹세', '신속의 장화'],
+        situationalItems: ['강철의 솔라리 펜던트', '가시 갑옷', '얼어붙은 심장', '심연의 가면'],
+        spells: ['점멸', '점화'],
+        skillOrder: 'Q > W > E > R',
+        runes: {
+          primaryPath: 'resolve',
+          keystone: 'aftershock',
+          primarySlot1: 'font_of_life',
+          primarySlot2: 'bone_plating',
+          primarySlot3: 'overgrowth',
+          secondaryPath: 'inspiration',
+          secondarySlot1: 'hextech_flashtraption',
+          secondarySlot2: 'cosmic_insight',
+          shardOffense: 'ability_haste',
+          shardFlex: 'move_speed',
+          shardDefense: 'scaling_health_def'
+        },
+        counters: [
+          { championId: 'morgana', championName: '모르가나', difficulty: '어려움', tip: '블랙실드가 CC기를 막으므로 실드가 빠진 후 진입하세요.' }
+        ],
+        playTips: [
+          '라인전 덤불 시야를 장악하고 적 원딜의 무빙 실수를 노려 기습 진입하세요.'
+        ],
+        lastUpdated: new Date().toISOString()
+      };
+    }
+
+    // AP 딜러 서포터 (브랜드, 자이라, 제라스, 벨코즈 등)
     return {
       championId: champion.id,
       lane,
-      startingItems: isSupport ? ['세계 지도의 정석', '체력 물약', '와드 토템'] : ['도란의 반지', '체력 물약', '와드 토템'],
-      coreItems: ['루덴의 동반자', '그림자불꽃', '라바돈의 죽음모자', '마법사의 신발'],
-      situationalItems: ['존야의 모래시계', '공허의 지팡이', '밴시의 장막', '모렐로노미콘'],
-      spells: isSupport ? ['점멸', '점화'] : ['점멸', '순간이동'],
+      startingItems: ['세계 지도의 정석', '체력 물약', '체력 물약'],
+      coreItems: ['자자크의 세계가시', '리안드리의 고통', '라일라이의 수정홀', '마법사의 신발'],
+      situationalItems: ['존야의 모래시계', '모렐로노미콘', '공허의 지팡이', '그림자불꽃'],
+      spells: ['점멸', '점화'],
       skillOrder: 'Q > W > E > R',
       runes: {
         primaryPath: 'sorcery',
@@ -2679,39 +2746,47 @@ export function generateDefaultBuild(champion: Champion, lane: Lane): ChampionBu
         primarySlot2: 'transcendence',
         primarySlot3: 'scorch',
         secondaryPath: 'inspiration',
-        secondarySlot1: 'magical_footwear',
+        secondarySlot1: 'biscuit_delivery',
         secondarySlot2: 'cosmic_insight',
-        shardOffense: 'adaptive_force_1',
+        shardOffense: 'ability_haste',
         shardFlex: 'adaptive_force_2',
         shardDefense: 'scaling_health_def'
       },
       counters: [
-        { championId: 'zed', championName: '제드', difficulty: '어려움', tip: '1코어 이후 빠른 초시계/존야의 모래시계를 올려 궁극기 폭딜을 흘려내세요.' },
-        { championId: 'malzahar', championName: '말자하', difficulty: '보통', tip: '스킬 사거리 우위를 활용해 패시브 쉴드를 평타나 짧은 스킬로 미리 벗겨내세요.' }
+        { championId: 'blitzcrank', championName: '블리츠크랭크', difficulty: '어려움', tip: '그랩에 당하지 않도록 미니언 뒤에서 장거리 스킬로 피를 깎으세요.' }
       ],
       playTips: [
-        '미니언 막타와 상대 챔피언 견제를 동시에 노려 마나순환 팔찌를 빠르게 채우세요.',
-        '라인을 밀었을 때는 양쪽 강가 시야를 밝히고 정글러의 위치를 상시 체크하세요.'
+        '최대 사거리에서 지속적인 포킹으로 상대 바텀 듀오의 피를 깎아 귀환을 강제하세요.'
       ],
       lastUpdated: new Date().toISOString()
     };
   }
 
-  if (champion.role === '원거리 딜러') {
+  // 3. 원거리 딜러 라인 (ADC)
+  if (isAdc || champion.role === '원거리 딜러') {
+    const onHitAdcs = ['vayne', 'kogmaw', 'varus', 'kaisa', 'kalista', 'ashe'];
+    const lethalityAdcs = ['missfortune', 'jhin', 'caitlyn', 'draven'];
+    const isOnHit = onHitAdcs.includes(champIdLower) || onHitAdcs.includes(champNameLower);
+    const isLethality = lethalityAdcs.includes(champIdLower) || lethalityAdcs.includes(champNameLower);
+
     return {
       championId: champion.id,
       lane,
       startingItems: ['도란의 검', '체력 물약', '와드 토템'],
-      coreItems: ['무한의 대검', '징수의 총', '도미닉 경의 인사', '광전사의 군화'],
-      situationalItems: ['피바라기', '수호 천사', '불멸의 철갑궁', '수은 장식띠'],
-      spells: ['점멸', '회복'],
+      coreItems: isOnHit
+        ? ['몰락한 왕의 검', '구인수의 격노검', '경계', '광전사의 군화']
+        : isLethality
+        ? ['징수의 총', '무한의 대검', '도미닉 경의 인사', '광전사의 군화']
+        : ['무한의 대검', '징수의 총', '도미닉 경의 인사', '광전사의 군화'],
+      situationalItems: ['피바라기', '수호 천사', '불멸의 철갑궁', '고속 연사포'],
+      spells: ['점멸', isOnHit ? '유체화' : '회복'],
       skillOrder: 'Q > W > E > R',
       runes: {
         primaryPath: 'precision',
-        keystone: 'press_the_attack',
+        keystone: isOnHit ? 'lethal_tempo' : isLethality ? 'first_strike' : 'press_the_attack',
         primarySlot1: 'absorb_life',
         primarySlot2: 'legend_alacrity',
-        primarySlot3: 'coup_de_grace',
+        primarySlot3: 'cut_down',
         secondaryPath: 'inspiration',
         secondarySlot1: 'magical_footwear',
         secondarySlot2: 'biscuit_delivery',
@@ -2720,28 +2795,198 @@ export function generateDefaultBuild(champion: Champion, lane: Lane): ChampionBu
         shardDefense: 'flat_health'
       },
       counters: [
-        { championId: 'nautilus', championName: '노틸러스', difficulty: '어려움', tip: '닻줄 견인 사거리를 항상 의식하고, 미니언 뒤에 숨어 파밍하세요.' }
+        { championId: 'nautilus', championName: '노틸러스', difficulty: '어려움', tip: '그랩 각을 미니언으로 차단하고 항상 아군 서포터 뒤에서 파밍하세요.' }
       ],
       playTips: [
-        '최우선 순위는 생존입니다. 적의 주요 위협 스킬이 빠질 때까지 앞포지션을 잡지 마세요.',
-        '자신을 공격할 수 있는 가장 가까운 적부터 차례대로 정리하세요.'
+        '원딜의 최우선 가치는 생존입니다. 적의 주요 궁극기와 CC기가 빠진 뒤 딜을 넣으세요.'
       ],
       lastUpdated: new Date().toISOString()
     };
   }
 
-  if (champion.role === '탱커') {
+  // 4. 정글 라인 (JUNGLE)
+  if (isJungle) {
+    const apJunglers = ['elise', 'evelynn', 'nidalee', 'ekko', 'diana', 'karthus', 'lillia', 'fiddlesticks', 'taliyah', 'gragas'];
+    const tankJunglers = ['amumu', 'sejuani', 'zac', 'rammus', 'nunu', 'skarner'];
+    const isAp = apJunglers.includes(champIdLower) || champion.role === '마법사';
+    const isTank = tankJunglers.includes(champIdLower) || champion.role === '탱커';
+
+    if (isAp) {
+      return {
+        championId: champion.id,
+        lane,
+        startingItems: ['바람돌이 새끼', '체력 물약'],
+        coreItems: ['폭풍쇄도', '리치베인', '존야의 모래시계', '마법사의 신발'],
+        situationalItems: ['그림자불꽃', '라바돈의 죽음모자', '공허의 지팡이', '메자이의 영혼약탈자'],
+        spells: ['강타', '점멸'],
+        skillOrder: 'Q > W > E > R',
+        runes: {
+          primaryPath: 'domination',
+          keystone: 'electrocute',
+          primarySlot1: 'sudden_impact',
+          primarySlot2: 'eerie_souvenir',
+          primarySlot3: 'relentless_hunter',
+          secondaryPath: 'sorcery',
+          secondarySlot1: 'waterwalking',
+          secondarySlot2: 'celerity',
+          shardOffense: 'attack_speed',
+          shardFlex: 'adaptive_force_2',
+          shardDefense: 'scaling_health_def'
+        },
+        jungleRoutes: DEFAULT_JUNGLE_ROUTES,
+        selectedJungleRouteId: 'blue_side_full_clear',
+        counters: [
+          { championId: 'leesin', championName: '리 신', difficulty: '보통', tip: '초반 카정에 주의하며 시야를 확보하고 성장하세요.' }
+        ],
+        playTips: ['첫 풀캠프 후 바위게 주도권을 잡고 라인이 당겨진 곳에 기습 갱킹을 시도하세요.'],
+        lastUpdated: new Date().toISOString()
+      };
+    }
+
+    if (isTank) {
+      return {
+        championId: champion.id,
+        lane,
+        startingItems: ['이끼쿵쿵이 새끼', '체력 물약'],
+        coreItems: ['태양불꽃 방패', '공허한 광휘', '케이닉 루컨', '판금 장화'],
+        situationalItems: ['가시 갑옷', '해신 작쇼', '란두인의 예언', '얼어붙은 심장'],
+        spells: ['강타', '점멸'],
+        skillOrder: 'Q > W > E > R',
+        runes: {
+          primaryPath: 'resolve',
+          keystone: 'aftershock',
+          primarySlot1: 'font_of_life',
+          primarySlot2: 'conditioning',
+          primarySlot3: 'overgrowth',
+          secondaryPath: 'precision',
+          secondarySlot1: 'triumph',
+          secondarySlot2: 'legend_haste',
+          shardOffense: 'ability_haste',
+          shardFlex: 'scaling_health_flex',
+          shardDefense: 'scaling_health_def'
+        },
+        jungleRoutes: DEFAULT_JUNGLE_ROUTES,
+        selectedJungleRouteId: 'blue_side_full_clear',
+        counters: [
+          { championId: 'viego', championName: '비에고', difficulty: '보통', tip: '초반 1대1 교전을 피하고 6렙 이후 광역 CC 한타로 승부하세요.' }
+        ],
+        playTips: ['용과 바론 한타에서 앞라인을 형성하고 적 주요 딜러에게 CC기를 집중하세요.'],
+        lastUpdated: new Date().toISOString()
+      };
+    }
+
+    // 기본 AD 브루저/암살자 정글
     return {
       championId: champion.id,
       lane,
-      startingItems: isJungle ? ['이끼쿵쿵이 새끼', '체력 물약'] : isSupport ? ['세계 지도의 정석', '체력 물약'] : ['도란의 방패', '체력 물약', '와드 토템'],
+      startingItems: ['화염발톱 새끼', '체력 물약'],
+      coreItems: ['월식', '갈라진 하늘', '스테락의 도전', '판금 장화'],
+      situationalItems: ['칠흑의 양날 도끼', '죽음의 무도', '수호 천사', '맬모셔스의 아귀'],
+      spells: ['강타', '점멸'],
+      skillOrder: 'Q > E > W > R',
+      runes: {
+        primaryPath: 'precision',
+        keystone: 'conqueror',
+        primarySlot1: 'triumph',
+        primarySlot2: 'legend_alacrity',
+        primarySlot3: 'coup_de_grace',
+        secondaryPath: 'domination',
+        secondarySlot1: 'sudden_impact',
+        secondarySlot2: 'relentless_hunter',
+        shardOffense: 'attack_speed',
+        shardFlex: 'adaptive_force_2',
+        shardDefense: 'scaling_health_def'
+      },
+      jungleRoutes: DEFAULT_JUNGLE_ROUTES,
+      selectedJungleRouteId: 'blue_side_full_clear',
+      counters: [
+        { championId: 'hecarim', championName: '헤카림', difficulty: '보통', tip: '헤카림의 빠른 합류전에 대비하여 역갱 동선을 짜세요.' }
+      ],
+      playTips: ['초반 강한 맞딜을 바탕으로 카운터 정글과 갱킹으로 스노우볼을 굴리세요.'],
+      lastUpdated: new Date().toISOString()
+    };
+  }
+
+  // 5. 미드 라인 (MID)
+  if (isMid || champion.role === '마법사' || champion.role === '암살자') {
+    const isApMage = champion.role === '마법사' || ['syndra', 'viktor', 'orianna', 'hwei', 'lux', 'ahri', 'veigar', 'anivia', 'aurelionsol', 'azir', 'zoe', 'vex'].includes(champIdLower);
+    const isAdMid = champion.role === '암살자' && ['zed', 'yasuo', 'yone', 'talon', 'qiyana', 'naafiri', 'pantheon', 'jayce'].includes(champIdLower);
+
+    if (isAdMid) {
+      return {
+        championId: champion.id,
+        lane,
+        startingItems: ['도란의 검', '체력 물약', '와드 토템'],
+        coreItems: ['요우무의 유령검', '기회', '밤의 끝자락', '명석함의 아이오니아 장화'],
+        situationalItems: ['도미닉 경의 인사', '원칙의 원형낫', '수호 천사', '맬모셔스의 아귀'],
+        spells: ['점멸', '점화'],
+        skillOrder: 'Q > E > W > R',
+        runes: {
+          primaryPath: 'domination',
+          keystone: 'electrocute',
+          primarySlot1: 'sudden_impact',
+          primarySlot2: 'sixth_sense',
+          primarySlot3: 'ultimate_hunter',
+          secondaryPath: 'precision',
+          secondarySlot1: 'triumph',
+          secondarySlot2: 'coup_de_grace',
+          shardOffense: 'adaptive_force_1',
+          shardFlex: 'adaptive_force_2',
+          shardDefense: 'scaling_health_def'
+        },
+        counters: [
+          { championId: 'malphite', championName: '말파이트', difficulty: '어려움', tip: '물리 방어력이 높은 챔피언 상대로는 사이드 로밍으로 킬을 수급하세요.' }
+        ],
+        playTips: ['라인을 빠르게 밀고 시야를 지운 뒤 바텀/정글 로밍으로 게임을 터뜨리세요.'],
+        lastUpdated: new Date().toISOString()
+      };
+    }
+
+    // 기본 AP 미드 메이지
+    return {
+      championId: champion.id,
+      lane,
+      startingItems: ['도란의 반지', '체력 물약', '와드 토템'],
+      coreItems: ['루덴의 동반자', '그림자불꽃', '라바돈의 죽음모자', '마법사의 신발'],
+      situationalItems: ['존야의 모래시계', '공허의 지팡이', '밴시의 장막', '모렐로노미콘'],
+      spells: ['점멸', '순간이동'],
+      skillOrder: 'Q > W > E > R',
+      runes: {
+        primaryPath: 'sorcery',
+        keystone: 'arcane_comet',
+        primarySlot1: 'manaflow_band',
+        primarySlot2: 'transcendence',
+        primarySlot3: 'scorch',
+        secondaryPath: 'inspiration',
+        secondarySlot1: 'biscuit_delivery',
+        secondarySlot2: 'cosmic_insight',
+        shardOffense: 'adaptive_force_1',
+        shardFlex: 'adaptive_force_2',
+        shardDefense: 'scaling_health_def'
+      },
+      counters: [
+        { championId: 'zed', championName: '제드', difficulty: '어려움', tip: '제드의 궁극기 턴에 존야의 모래시계로 폭딜을 흘려내세요.' }
+      ],
+      playTips: ['거리 조절을 유지하며 Q-E 포킹으로 적을 압박하고 대형 오브젝트 교전에서 광역 피해를 쏟아부으세요.'],
+      lastUpdated: new Date().toISOString()
+    };
+  }
+
+  // 6. 탑 라인 (TOP) 및 탱커/전사 기본 빌드
+  const isTankTop = champion.role === '탱커' || ['malphite', 'ornn', 'sion', 'ksante', 'shen', 'poppy', 'drmundo', 'cho_gath'].includes(champIdLower);
+
+  if (isTankTop) {
+    return {
+      championId: champion.id,
+      lane,
+      startingItems: ['도란의 방패', '체력 물약', '와드 토템'],
       coreItems: ['태양불꽃 방패', '강철심장', '케이닉 루컨', '판금 장화'],
       situationalItems: ['가시 갑옷', '란두인의 예언', '얼어붙은 심장', '대자연의 힘'],
-      spells: isJungle ? ['강타', '점멸'] : isTop ? ['점멸', '순간이동'] : ['점멸', '점화'],
+      spells: ['점멸', '순간이동'],
       skillOrder: 'Q > W > E > R',
       runes: {
         primaryPath: 'resolve',
-        keystone: isJungle ? 'aftershock' : 'grasp_of_the_undying',
+        keystone: 'grasp_of_the_undying',
         primarySlot1: 'demolish',
         primarySlot2: 'second_wind',
         primarySlot3: 'overgrowth',
@@ -2752,26 +2997,22 @@ export function generateDefaultBuild(champion: Champion, lane: Lane): ChampionBu
         shardFlex: 'scaling_health_flex',
         shardDefense: 'scaling_health_def'
       },
-      jungleRoutes: isJungle ? DEFAULT_JUNGLE_ROUTES : undefined,
-      selectedJungleRouteId: isJungle ? 'blue_side_full_clear' : undefined,
       counters: [
-        { championId: 'fiora', championName: '피오라', difficulty: '어려움', tip: '체력 퍼센트 고정 피해를 주므로 덤불 조끼를 우선 올리고 벽에 등을 대세요.' }
+        { championId: 'fiora', championName: '피오라', difficulty: '어려움', tip: '체력 퍼센트 고정 피해를 주므로 덤불 조끼를 빠르게 올리고 벽을 등지세요.' }
       ],
-      playTips: [
-        '한타 시 아군 원딜을 무는 적 브루저/암살자에게 CC기를 퍼붓거나, 적 주요 진영을 붕괴시키세요.'
-      ],
+      playTips: ['라인전에서 안정적으로 성장한 뒤 한타에서 강력한 진형 파괴와 CC기로 승리하세요.'],
       lastUpdated: new Date().toISOString()
     };
   }
 
-  // 기본 전사/브루저
+  // 기본 탑 브루저/전사
   return {
     championId: champion.id,
     lane,
-    startingItems: isJungle ? ['화염발톱 새끼', '체력 물약'] : ['도란의 검', '체력 물약', '와드 토템'],
+    startingItems: ['도란의 검', '체력 물약', '와드 토템'],
     coreItems: ['삼위일체', '갈라진 하늘', '스테락의 도전', '판금 장화'],
     situationalItems: ['칠흑의 양날 도끼', '죽음의 무도', '맬모셔스의 아귀', '수호 천사'],
-    spells: isJungle ? ['강타', '점멸'] : ['점멸', '순간이동'],
+    spells: ['점멸', '순간이동'],
     skillOrder: 'Q > E > W > R',
     runes: {
       primaryPath: 'precision',
@@ -2786,8 +3027,6 @@ export function generateDefaultBuild(champion: Champion, lane: Lane): ChampionBu
       shardFlex: 'adaptive_force_2',
       shardDefense: 'scaling_health_def'
     },
-    jungleRoutes: isJungle ? DEFAULT_JUNGLE_ROUTES : undefined,
-    selectedJungleRouteId: isJungle ? 'blue_side_full_clear' : undefined,
     counters: [
       { championId: 'darius', championName: '다리우스', difficulty: '어려움', tip: '출혈 5스택이 쌓이기 전에 짧은 딜교환 후 빠지는 플레이가 필수입니다.' }
     ],

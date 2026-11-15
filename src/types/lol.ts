@@ -28,6 +28,7 @@ export interface RuneInfo {
 
 export interface RuneSlot {
   slotIndex: number;
+  slotName?: string;
   runes: RuneInfo[];
 }
 
@@ -119,6 +120,8 @@ export interface ChampionBuild {
   counters: CounterChampion[];
   playTips: string[];
   lastUpdated: string;
+  presetVersion?: string;
+  isUserCustomized?: boolean;
 }
 
 export interface MatchFeedback {

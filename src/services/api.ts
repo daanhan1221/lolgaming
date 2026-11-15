@@ -12,7 +12,8 @@ import {
   Unsubscribe
 } from 'firebase/firestore';
 
-const STORAGE_KEY = 'lol_tactical_playbook_db_v1';
+const STORAGE_KEY = 'lol_tactical_playbook_db_v6';
+const CURRENT_PRESET_VERSION = 'opgg_kr_emerald_16_22';
 
 export enum OperationType {
   CREATE = 'create',
@@ -354,6 +355,17 @@ export const api = {
         isCloudSynced = true;
         const data = buildDoc.data() as ChampionBuild;
         const localDb = getLocalDatabase();
+        const champ = localDb.champions.find((c) => c.id === championId) || INITIAL_CHAMPIONS.find((c) => c.id === championId);
+        // Refresh auto-seeded builds if outdated while preserving user-customized builds
+        if (!data.isUserCustomized && data.presetVersion !== CURRENT_PRESET_VERSION && champ && !champ.isCustom) {
+          const refreshed = generateDefaultBuild(champ, upperLane);
+          localDb.builds[key] = refreshed;
+          saveLocalDatabase(localDb);
+          setDoc(doc(db, 'builds', key), cleanForFirestore(refreshed)).catch((e) => {
+            handleFirestoreError(e, OperationType.UPDATE, `builds/${key}`);
+          });
+          return refreshed;
+        }
         localDb.builds[key] = data;
         saveLocalDatabase(localDb);
         return data;
@@ -391,7 +403,8 @@ export const api = {
     const updated = {
       ...build,
       lane: build.lane.toUpperCase() as Lane,
-      lastUpdated: new Date().toISOString()
+      lastUpdated: new Date().toISOString(),
+      isUserCustomized: true
     };
 
     const localDb = getLocalDatabase();

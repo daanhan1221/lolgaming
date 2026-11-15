@@ -42,6 +42,35 @@ function initDatabase(): AppDatabase {
           if (!parsed.champions.some(c => c.id === official.id)) {
             parsed.champions.push(official);
           }
+          // Ensure every lane has its distinct build
+          for (const lane of official.lanes) {
+            const key = `${official.id}_${lane}`;
+            if (!parsed.builds[key] || !parsed.builds[key].coreItems || parsed.builds[key].coreItems.length === 0) {
+              parsed.builds[key] = generateDefaultBuild(official, lane);
+            }
+          }
+        }
+
+        // Re-generate official champion builds if OP.GG preset exists
+        for (const official of INITIAL_CHAMPIONS) {
+          for (const lane of official.lanes) {
+            const key = `${official.id}_${lane}`;
+            const generated = generateDefaultBuild(official, lane);
+            // If user hasn't heavily customized, sync with current accurate OP.GG meta
+            if (parsed.builds[key]) {
+              parsed.builds[key].lane = lane;
+              parsed.builds[key].spells = generated.spells;
+              parsed.builds[key].coreItems = generated.coreItems;
+              parsed.builds[key].situationalItems = generated.situationalItems;
+              parsed.builds[key].startingItems = generated.startingItems;
+              parsed.builds[key].runes = generated.runes;
+              parsed.builds[key].skillOrder = generated.skillOrder;
+              parsed.builds[key].counters = generated.counters;
+              parsed.builds[key].playTips = generated.playTips;
+            } else {
+              parsed.builds[key] = generated;
+            }
+          }
         }
 
         fs.writeFileSync(DB_FILE, JSON.stringify(parsed, null, 2), 'utf-8');
@@ -120,7 +149,7 @@ function saveDatabase() {
 
 async function startServer() {
   const app = express();
-  const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3000;
+  const PORT = 3000;
   const isProd = process.env.NODE_ENV === 'production';
 
   app.use(express.json({ limit: '10mb' }));

@@ -18,6 +18,7 @@ interface ChampionDetailViewProps {
   onAddFeedback: (feedback: Omit<MatchFeedback, 'id' | 'createdAt'>) => Promise<void>;
   onDeleteFeedback: (id: string) => Promise<void>;
   buildData?: ChampionBuild;
+  onSelectLane?: (lane: Lane) => void;
 }
 
 export const ChampionDetailView: React.FC<ChampionDetailViewProps> = ({
@@ -29,13 +30,21 @@ export const ChampionDetailView: React.FC<ChampionDetailViewProps> = ({
   feedbacks,
   onAddFeedback,
   onDeleteFeedback,
-  buildData
+  buildData,
+  onSelectLane
 }) => {
   const [currentLane, setCurrentLane] = useState<Lane>(
     initialLane && champion.lanes.includes(initialLane)
       ? initialLane
       : champion.primaryLane || champion.lanes[0] || 'MID'
   );
+
+  // Sync internal currentLane when initialLane prop changes
+  useEffect(() => {
+    if (initialLane && initialLane !== currentLane) {
+      setCurrentLane(initialLane);
+    }
+  }, [initialLane]);
 
   const [activeTab, setActiveTab] = useState<'build' | 'runes' | 'jungle' | 'counters' | 'feedback'>(
     currentLane === 'JUNGLE' ? 'jungle' : 'runes'
@@ -135,6 +144,9 @@ export const ChampionDetailView: React.FC<ChampionDetailViewProps> = ({
                   key={l}
                   onClick={() => {
                     setCurrentLane(l);
+                    if (onSelectLane) {
+                      onSelectLane(l);
+                    }
                     if (l === 'JUNGLE' && activeTab !== 'feedback') {
                       setActiveTab('jungle');
                     }

@@ -234,6 +234,12 @@ export const RuneBuilder: React.FC<RuneBuilderProps> = ({ runes, onChange, readO
 
               return (
                 <div key={slotIdx} className="bg-slate-950/60 p-2.5 rounded-lg border border-slate-900">
+                  {slot.slotName && (
+                    <div className="text-[11px] font-semibold text-slate-400 mb-1.5 flex items-center justify-between">
+                      <span>{slot.slotName}</span>
+                      <span className="text-[10px] text-slate-500 font-mono">{slotIdx + 1}열</span>
+                    </div>
+                  )}
                   <div className="grid grid-cols-3 gap-2">
                     {slot.runes.map((rune) => {
                       const isSelected = selectedRuneId === rune.id;
@@ -302,6 +308,12 @@ export const RuneBuilder: React.FC<RuneBuilderProps> = ({ runes, onChange, readO
             <div className="space-y-2">
               {currentSecondary.slots.map((slot, sIdx) => (
                 <div key={sIdx} className="bg-slate-950/60 p-2 rounded border border-slate-900">
+                  {slot.slotName && (
+                    <div className="text-[10px] font-semibold text-slate-400 mb-1 flex items-center justify-between">
+                      <span>{slot.slotName}</span>
+                      <span className="text-[9px] text-slate-500 font-mono">{sIdx + 1}열</span>
+                    </div>
+                  )}
                   <div className="grid grid-cols-3 gap-1.5">
                     {slot.runes.map((rune) => {
                       const isSelected = runes.secondarySlot1 === rune.id || runes.secondarySlot2 === rune.id;
