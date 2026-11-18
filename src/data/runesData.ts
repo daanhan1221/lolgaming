@@ -278,9 +278,9 @@ export const RUNE_PATHS: Record<string, RunePath> = {
       },
       {
         id: 'phase_rush',
-        name: '난입',
-        englishName: 'Phase Rush',
-        description: '4초 안에 한 챔피언에게 기본 공격 또는 개별 스킬 3회를 적중시키면 3초 동안 이동 속도가 25~50% 대폭 증가하고 50%의 둔화 저항 효과를 얻습니다. (원거리 챔피언은 이동 속도 75% 적용, 재사용 대기시간 30~10초)',
+        name: '폭풍전사의 포효',
+        englishName: "Stormraider's Surge",
+        description: '3초 안에 챔피언 최대 체력의 25%에 해당하는 피해를 입히면 4초 동안 이동 속도가 48%, 둔화 저항이 50% 증가합니다. (원거리 챔피언은 이동 속도 증가 효과가 75%만 적용, 재사용 대기시간 20~10초)',
         icon: '💨'
       },
       {
